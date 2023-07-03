@@ -1,0 +1,510 @@
+body{
+    background-color: #383838;
+    color: white;
+    font-family: Arial;
+    margin: 0;
+}
+
+header{
+    background-color: #272727;
+    padding: 1px;
+    padding-left: 30px;
+    position: sticky;
+    top: 0;
+}
+
+footer{
+	background-color: #464646;
+	position: fixed;
+    bottom: 0;
+	width: 100%;
+	height: 80px;
+	font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 48;
+    display: flex;
+	justify-content: center;
+    align-items: center;
+}
+
+/*Links on the header*/
+.indexLinks, .linksHome{
+    margin-top: 25px;
+    margin-right: 30px;
+    float: right;
+}
+
+/*Link box for the home page*/
+.linksHome{
+    margin-top: 15px;
+}
+
+/*Text on the main page of Zanith*/
+.mainText, .signupLoginDiv, .uploadContainer{
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -250px;
+    text-align: center;
+    font-size: 20px;
+}
+
+/*Container that contains the username, password, and email textbox, as well as the */
+.signupLoginDiv, .uploadContainer{
+    background-color: #1f1f1f;
+    padding: 30px;
+    border-radius: 20px;
+    padding-top: 0px;
+    text-align: left;
+    padding-left: 30px;
+    float:right;
+}
+
+.uploadContainer{
+    margin-left: -625px;
+    display: flex;
+}
+
+.songInfo{
+    float: left;
+}
+
+.displayCover{
+    display: flex;
+    flex-direction: column;
+}
+
+.displaySongs, .displayImage{
+    margin-top: 80px;
+    width: 400px;
+    float:left;
+}
+
+.progressSection{
+    display: flex;
+    margin-top: 290px;
+    align-items: center;
+    font-size:15px;
+}
+
+.progressTemplate{
+    font-size: 10px;
+    background-color: #9e9e9e;
+    margin-bottom: 0px;
+    height: 10px;
+    border-radius: 10px;
+    width: 50%;
+    margin-left: 5px;
+}
+
+#progressBar{
+    background-color: lightcyan;
+    height: 10px;
+    border-radius: 10px;
+    width: 0%;
+}
+
+/*Adjusts the title, label, and button of the login and signup page to match the overall aesthetics*/
+.authenticationMargin, .authenticationLabel, .authenticationTitle, .songUpload{
+    margin-left: 20px;
+}
+
+.authenticationLabel{
+    font-size: 17px;
+}
+
+.authenticationTitle{
+    font-size: 30px;
+}
+
+#usernameMessageLogin, #passwordMessageLogin, #usernameMessageSignup, #passwordMessageSignup, #emailMessageSignup, #titleMessageUpload, #descriptionMessageUpload, #songUploadMessageUpload, #imageUploadMessageUpload, #genreMessageUpload{
+    color: red;
+    font-size: 12px;
+    margin-left: 20px;
+    height: 50px;
+}
+
+/*Signup and Login Buttons to redirect the user to the signup and login page*/
+.signupLoginButton, .signupLoginButton:Hover{
+	border: 2px solid white;
+	border-radius: 10px;
+	padding: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+    margin-right: 20px;
+    background: none;
+    color: white;
+    text-decoration: none;
+}
+
+.signupLoginButton:hover {
+    background-color: rgba(255, 255, 255, 0.103);
+}
+
+/*The username, password, and email textbox for the login/signup page*/
+.textbox, .searchTextbox{
+    background-color: #303030;
+    padding: 10px;
+    width: 350px;
+    color: lightgrey;
+    text-decoration: 0px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    float:right;
+    margin-left: 20px;
+    outline: none;
+}
+
+/*Search textbox for the search textbox*/
+.searchTextbox{
+    background-color: #444444;
+    float: none;
+}
+
+/*Create a description textbox for the song upload*/
+textarea {
+    resize: none;
+    font-family: Arial;
+    height: 200px;
+}
+
+/*Submits the login/signup info to the client side*/
+.submit, .submit:active, .submitSong, .submitSongs{
+    background-color: #444444;
+    padding: 9px;
+    color: lightgrey;
+    font-size: 15px;
+    text-decoration: 0px;
+    border: none;
+    border-radius: 5px;
+}
+.submit:active, .submitSong:active, .submitSongs:active{
+    background-color: black;
+}
+
+/*Button to submit songs for search*/
+.submitSong{
+    margin-right: 20px;
+}
+
+/*Custom buttom to upload song*/
+.submitSongs{
+    margin-top: 20px;
+}
+
+/*Customise styles for links*/
+a{
+    color: white;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+/*Modified sections in home page to match aesthetics of the page*/
+#recordLabels, #recommendedSongs, #topSongs, #recommendedArtists, .searchDisplay{
+    margin-left: 30px;
+}
+
+/*Div box for the profile pic in the profile page header*/
+#profileHeaderPicture{
+    background-color: lightslategray;
+    height: 200px;
+    padding: 0px;
+    margin: 0px;
+    width: 1900px;
+    display: flex;
+}
+
+/*Container for the profile which contains the songDisplay and the albumDisplay*/
+.profileContainer{
+    display: flex;
+}
+
+/*Displays all the songs in one section and displays all the albums in the other section*/
+.songDisplay, .albumDisplay{
+    background-color: #292929;
+    padding: 1px;
+    padding-left: 20px;
+    width: 100%;
+    height: 700px;
+}
+
+/*Displays all the albums in a section*/
+.albumDisplay{
+    width: 40%;
+}
+
+/*Style horizontal ruler/line*/
+hr{
+	height:1px;
+	border-width:0;
+	color:gray;
+	background-color:gray;
+    margin-bottom: 20px;
+}
+
+/*Container which contains the songs*/
+.songContainer{
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start; /*Used to be "start" and not flex-start*/
+    flex-flow: row wrap;
+}
+
+/*Container which contains the song image, name, and basic infos*/
+.individualSongContainer{
+    display: flex;
+    background-color: rgb(58, 58, 58);
+    border-radius: 10px 10px 10px 10px;
+    width: 400px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+	height: 70px;
+}
+
+/*Contains the song image and play/pause icon*/
+.imageContainer{
+	position: relative;
+}
+
+/*Displays the song image*/
+.songImage{
+	border-radius: 10px 0px 0px 10px;
+}
+
+/*Hides the play/pause icon by default*/
+.individualSongContainer .playPauseIcon{
+	visibility: hidden;
+	position: absolute;
+	top: 12px;
+	left: 12px;
+    float: right;
+}
+
+/*When the song box is hovered, the song image becomes a bit transparent*/
+.individualSongContainer:hover .songImage{
+    transition-duration: 0.25s;
+	opacity: 0.60;
+}
+
+/*When the song box is hovered, the play/pause icon becomes visible*/
+.individualSongContainer:hover .playPauseIcon{
+    visibility: visible;
+}
+
+/*Style the title of the song*/
+.songTitle, .songArtist{
+    margin: 10px;
+	margin-bottom: 0px;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+    overflow: hidden;
+    max-width: 181px;
+}
+
+.songArtist{
+    margin-top: 0px;
+    font-size: 11px;
+    color: rgb(206, 206, 206)
+}
+
+/*Style the icons*/
+.icon{
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    margin-left: 3px;
+    padding: 0px;
+    height: 20px;
+	margin-right: 3px;
+	user-select: none;
+    font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 48;
+    color: #C0C0C0;
+}
+
+/*Displays the genre tags beside the song title*/
+.genreSection{
+	width: 100%;
+	height: 70px;
+	float: right;
+}
+
+/*Generate custom genre tags*/
+.genreClassical, .genreRock, .genreElectronic, .genreHipHop, .genreRap, .genreOther{
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 6px;
+	padding-right: 6px;
+
+	margin-top: 8px;
+
+    font-size: 11px;
+	border-radius: 10px;
+    background: none;
+    text-decoration: none;
+	float: left;
+
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+    overflow: hidden;
+    max-width: 50px;
+}
+
+.genreClassical{
+	border: 2px solid orange;
+	color: orange;
+}
+
+.genreRock{
+	border: 2px solid red;
+	color: red;
+}
+
+.genreElectronic{
+	border: 2px solid lightblue;
+	color: lightblue;
+}
+
+.genreHipHop{
+	border: 2px solid lightseagreen;
+	color: lightseagreen;
+}
+
+.genreRap{
+	border: 2px solid lightpink;
+	color: lightpink;
+}
+
+.genreOther{
+	border: 2px solid lightseagreen;
+	color: lightseagreen;
+}
+
+/*Contains the likes and comments icon and stats*/
+.songStats{
+	display: flex;
+    align-items: center;
+	float: right;
+	margin-top: 35px;
+	margin-right: 7px;
+}
+
+/*Styles the icons*/
+.iconStyles{
+	color: #C0C0C0;
+	cursor: pointer;
+    user-select: none;
+}
+
+.iconStyles:hover{
+	color: #9e9e9e;
+    transition-duration: 0.25s;
+}
+
+.controls{
+	display: flex;
+	align-items: center;
+}
+
+.controlsIcon{
+	margin-right: 5px;
+}
+
+.musicDetails{
+    display: flex;
+}
+
+#songCover, #songCoverBackground{
+	margin-left: 110px;
+}
+
+#songCoverBackground{
+    background-color: rgb(46, 50, 54);
+    border-radius: 5px 0px 0px 5px;
+	padding: 20px;
+
+}
+
+/*Changes the border radius of the image cover in the footer.*/
+.songImageCover{
+	border-radius: 5px 0px 0px 5px;
+}
+
+.titleAndArtist{
+    background-color: rgb(116, 116, 116);
+    border-radius: 0px 5px 5px 0px;
+	width: 600px;
+}
+
+.musicPlayerTitle, .musicPlayerArtist{
+	margin: 0px;
+	margin-left: 15px;
+	margin-top: 5px;
+	font-size: 15px;
+}
+
+.musicPlayerArtist{
+	margin-top: 0px;
+	font-size: 13px;
+	color: rgb(206, 206, 206)
+}
+
+.timeStamp{
+	display: flex;
+}
+
+#beginningTime, #endTime{
+	margin-left: 15px;
+	font-size: 10px;
+}
+
+#songSlider, #volumeSlider{
+	width: 80%;
+	margin-top: 3px;
+	margin-left: 15px;
+	accent-color: lightblue;
+	background-color: lightblue;
+	border: 0px;
+}
+
+#volumeSlider{
+	margin-top: 2px;
+	margin-left: 5px;
+	width: 100%;
+}
+
+.volumeControls{
+	display: flex;
+    margin-left: 50px;
+}
+
+.searchBody{
+    background-color: #2e2e2e;
+}
+
+.searchArtistContainer{
+    width: 350px;
+    height: 70px;
+    background-color: rgba(81, 91, 99, 0.562);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 17px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.noResults{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.recordLabelImage{
+    border-radius: 30px;
+    width: 300px;
+}
+
+.recordLabelImage:hover{
+    opacity: 0.8;
+}
