@@ -26,9 +26,6 @@ export default function Login(){
         }
         //Sends the user data to the server.
         if(submit === true && username !== "" && password !== ""){
-            console.log(username);
-            console.log(password);
-
             let userInfo = {"username": username, "password": password};
     
             let xhttp = new XMLHttpRequest();

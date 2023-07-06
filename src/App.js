@@ -7,9 +7,7 @@ import Login from './pages/Login.js'
 import SignUp from './pages/SignUp.js'
 import Home, {homeLoader} from './pages/Home.js';
 import Upload from './pages/Upload.js';
-import Profile from './pages/Profile.js';
-import ArtistName from './pages/ArtistName.js'
-import RecordLabel from './pages/RecordLabel.js'
+import ArtistName, {artistLoader} from './pages/ArtistName.js'
 import LabelName from './pages/LabelName.js'
 
 import RootLayout from './layouts/RootLayout'
@@ -24,14 +22,8 @@ const router = createBrowserRouter(
 			<Route element={<RootLayout/>}>
 				<Route path="home" element={<Home/>} loader={homeLoader}/>
 				<Route path="upload" element={<Upload/>}/>
-
-				<Route path="profile" element={<Profile/>} >
-					<Route path=":artistName" element={<ArtistName/>} />
-				</Route>
-				
-				<Route path="recordlabel" element={<RecordLabel/>} >
-					<Route path=":labelName" element={<LabelName/>} />
-				</Route>
+				<Route path="profile/:artistName" element={<ArtistName/>} loader={artistLoader} />
+				<Route path="recordlabel/:labelName" element={<LabelName/>} />
 			</Route>
 		</Route>
 	)

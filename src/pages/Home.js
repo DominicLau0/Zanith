@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import RecordLabelImage from "../images/record-label.jpg"
-import { NavLink, useNavigate, useLoaderData } from "react-router-dom"
+import { NavLink, useNavigate, useLoaderData, useOutletContext } from "react-router-dom"
 import axios from "axios"
 import DisplaySong from "../Reusable_Functions/display_song.js"
 
@@ -11,7 +11,8 @@ export default function Home(){
 		document.body.classList.add("searchBody");
 	}, []);
 
-	const cloud_name = "dw5heht2b";
+	let { switchFunction, like }  = useOutletContext();
+
 	const navigate = useNavigate();
 	const songs = useLoaderData();
 
@@ -26,14 +27,14 @@ export default function Home(){
 			<br />
 			<div id="recommendedSongs">
 				<h2>Recommended Songs </h2>
-				<DisplaySong songs={songs} cloud_name={cloud_name}/>
+				<DisplaySong songs={songs} switchFunction={switchFunction} like={like}/>
 			</div>
 			<br />
 			<div id="topSongs">
 			</div>
 			<div id="recommendedArtists">
 				<h2>Artists you may like</h2>
-				<div className="searchArtistContainer" onClick={() => navigate("/profile/MrObvious")}>
+				<div className="searchArtistContainer" onClick={() => navigate(`/profile/MrObvious`)}>
 					<i className="material-symbols-outlined iconStyles" style={{fontSize:"40px", marginLeft:"20px"}}>account_circle</i>
 					<p style={{marginLeft: "10px"}}>MrObvious</p>
 				</div>
