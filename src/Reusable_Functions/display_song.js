@@ -3,10 +3,12 @@ import React from 'react'
 const cloud_name = "dw5heht2b";
 let lastPlayedTrack;
 
-function increaseListenCount(trackId){
+function increaseListenCount(trackId, pictureId, username, title, props){
     if(trackId === lastPlayedTrack){
+        props.switchFunction(trackId, pictureId, username, title);
         return;
     }else{
+        props.switchFunction(trackId, pictureId, username, title);
         lastPlayedTrack = trackId;
     }
 
@@ -35,13 +37,26 @@ export default function DisplaySong(props){
                 <div className="individualSongContainer" key={song.song}>
                     <div className="imageContainer">
                         <img className="songImage" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_70,h_70,c_fill,q_100/${song.picture}`} alt={`${song.title}`} />
-                        <i className="material-symbols-outlined iconStyles playPauseIcon" style={{fontSize:"45px"}} id={`${song.song}`} onClick={() => props.switchFunction(`${song.song}`, `${song.picture}`, `${song.username}`, `${song.title}`)}>play_circle</i></div>
+                        {
+                            (() => {
+                                if(props.lastPlayedTrack === song.song){
+                                    return(
+                                        <i className="material-symbols-outlined iconStyles playPauseIcon" style={{fontSize:"45px"}} id={`${song.song}`} onClick={() => increaseListenCount(song.song, song.picture, song.username, song.title, props)}>pause_circle</i>
+                                    )
+                                }else{
+                                    return(
+                                        <i className="material-symbols-outlined iconStyles playPauseIcon" style={{fontSize:"45px"}} id={`${song.song}`} onClick={() => increaseListenCount(song.song, song.picture, song.username, song.title, props)}>play_circle</i>
+                                    )
+                                }
+                            })()
+                        }
+                    </div>
                     <div className="songTitleandListens">
                         <p className="songTitle">{song.title}</p>
                         <p className="songArtist">{song.username}</p>
                         <div className="icon">
                             <i className="material-symbols-outlined" style={{fontSize:"18px"}}>play_arrow</i>
-                            <p style={{fontSize:"14px"}} id={`listenAmount:${song.song}`} onClick = {() => increaseListenCount(song.song)}>{song.listens}</p>
+                            <p style={{fontSize:"14px"}} id={`listenAmount:${song.song}`}>{song.listens}</p>
                         </div>
                     </div>
                     <div className="genreSection">

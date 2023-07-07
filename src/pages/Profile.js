@@ -1,5 +1,4 @@
-import React from 'react'
-import { useLayoutEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useParams, useLoaderData, useOutletContext } from 'react-router-dom';
 import DisplaySong from "../Reusable_Functions/display_song.js"
 import axios from 'axios';
@@ -7,11 +6,11 @@ import axios from 'axios';
 export default function ArtistName(){
     const { artistName } = useParams()
 
-	useLayoutEffect(() => {
-		document.title = artistName + ' on Zanith'
+	useEffect(() => {
+		document.title = artistName + ' on Zanith';
 	}, []);
 
-    let { switchFunction, like }  = useOutletContext();
+    let { switchFunction, like, lastPlayedTrack }  = useOutletContext();
     const songs = useLoaderData();
 
     return (
@@ -24,7 +23,7 @@ export default function ArtistName(){
                 <div className="songDisplay">
                     <h3>Songs</h3>
                     <hr />
-                    <DisplaySong songs={songs} switchFunction={switchFunction} like={like}/>
+                    <DisplaySong songs={songs} switchFunction={switchFunction} like={like} lastPlayedTrack={lastPlayedTrack}/>
                 </div>
             </div>
         </>

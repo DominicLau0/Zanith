@@ -3,6 +3,7 @@ body{
     color: white;
     font-family: Arial;
     margin: 0;
+    margin-bottom: 100px;
 }
 
 header{
@@ -202,6 +203,7 @@ a{
 /*Modified sections in home page to match aesthetics of the page*/
 #recordLabels, #recommendedSongs, #topSongs, #recommendedArtists, .searchDisplay{
     margin-left: 30px;
+    margin-right: 30px;
 }
 
 /*Div box for the profile pic in the profile page header*/

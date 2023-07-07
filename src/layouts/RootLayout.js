@@ -1,6 +1,7 @@
 import React from 'react'
-import { NavLink, Outlet, useNavigate } from "react-router-dom"
+import { NavLink, Outlet, useNavigate, useLoaderData } from "react-router-dom"
 import { useEffect } from 'react';
+import axios from 'axios';
 
 let currentSong = document.createElement('audio');
 
@@ -18,7 +19,14 @@ function pauseSong(trackId){
 
 	cancelAnimationFrame(interval);
 	
-    document.getElementById(trackId).innerHTML = "play_circle";
+    /*
+    Basically if you're on a page playing a song called "Tropical Beach" and you navigate to a different page
+    and play a different song, it will pause this song to play the other song, but since this song might not appear on that page,
+    it will give document.getElementById a null value.
+    */
+    if(document.getElementById(trackId) !== null){
+        document.getElementById(trackId).innerHTML = "play_circle";
+    }
     document.getElementById("play_arrow").innerHTML = "play_arrow";        
 }
 
@@ -86,16 +94,17 @@ function calculateVolume(volume){
 function logout(){
     let xhttp = new XMLHttpRequest();
 
-    xhttp.open("POST", "/logout", false);
+    xhttp.open("POST", "http://localhost:5000/logout", false);
+    xhttp.withCredentials = true;
     xhttp.send();
 }
 
 function repeat(){
     if(currentSong.loop === true){
-        document.getElementById("repeat").textContent = "repeat";
+        document.getElementById("repeat").style.color = "";
         currentSong.loop = false;
     }else{
-        document.getElementById("repeat").textContent = "repeat_on";
+        document.getElementById("repeat").style.color = "lightblue";
         currentSong.loop = true;
     }
 }
@@ -155,11 +164,16 @@ function footerSwitchFunction(){
     if(currentSong.paused){
         currentSong.play();
         document.getElementById("play_arrow").innerHTML = "pause";
-        document.getElementById(lastPlayedTrack).innerHTML = "pause_circle";
+		if(document.getElementById(lastPlayedTrack) !== null){
+			document.getElementById(lastPlayedTrack).innerHTML = "pause_circle";
+		}
     }else{
         currentSong.pause();
         document.getElementById("play_arrow").innerHTML = "play_arrow";
-        document.getElementById(lastPlayedTrack).innerHTML = "play_circle";
+
+		if(document.getElementById(lastPlayedTrack) !== null){
+			document.getElementById(lastPlayedTrack).innerHTML = "play_circle";
+		}
     }
 }
 
@@ -172,14 +186,14 @@ function displaySongImage(pictureId){
     }
 }
 
+/*Output the total duration of the song*/
+currentSong.onloadedmetadata = function(){
+    document.getElementById("endTime").innerHTML = calculateTime(currentSong.duration);
+    document.getElementById("songSlider").setAttribute('max', `${Math.floor(currentSong.duration * 1000)}`);
+};
+
 export default function RootLayout(){
     useEffect(() => {
-        /*Output the total duration of the song*/
-        currentSong.onloadedmetadata = function(){
-            document.getElementById("endTime").innerHTML = calculateTime(currentSong.duration);
-            document.getElementById("songSlider").setAttribute('max', `${Math.floor(currentSong.duration * 1000)}`);
-        };
-
         let songSlider = document.getElementById("songSlider");
 
 		songSlider.addEventListener('input', () =>{
@@ -192,7 +206,9 @@ export default function RootLayout(){
 
 		/*After the user changes the song range, it'll update the time.*/
 		songSlider.addEventListener('change', () =>{
-			currentSong.currentTime = currentSong.duration * (document.getElementById("songSlider").value / (currentSong.duration * 1000));
+            if(currentSong.src !== ""){
+                currentSong.currentTime = currentSong.duration * (document.getElementById("songSlider").value / (currentSong.duration * 1000));
+            }
 
 			if(!currentSong.paused){
 				requestAnimationFrame(updateTimeStamp);
@@ -216,6 +232,7 @@ export default function RootLayout(){
 
     //For some reason putting this outside the function breaks the website.
     const navigate = useNavigate();
+    const username = useLoaderData().username;
 
     function searchSong(){
         let search = document.getElementById("search").value;
@@ -233,14 +250,14 @@ export default function RootLayout(){
                     <button type="button" className="submitSong" onClick={() => searchSong()}>Search</button>
                     <NavLink to="home">Home</NavLink>
                     <NavLink to="upload">Upload</NavLink>
-                    <NavLink to="profile">Profile</NavLink>
+                    <NavLink to={"profile/" + username}>Profile</NavLink>
                     <NavLink to="/" onClick={() => logout()}>Logout</NavLink>
                 </div>
                 <h2>Zanith</h2>
             </header>
 
             <main>
-                <Outlet context = {{switchFunction, like}}/>
+                <Outlet context = {{switchFunction, like, lastPlayedTrack}}/>
             </main>
 
             <footer>
@@ -271,4 +288,10 @@ export default function RootLayout(){
             </footer>
         </>
     )
+}
+
+export const rootLoader = async () => {
+	const res = await axios.get("http://localhost:5000/root", {withCredentials: true});
+
+	return res.data;
 }

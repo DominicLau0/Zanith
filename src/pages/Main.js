@@ -1,6 +1,7 @@
 import React from 'react'
-import { NavLink } from "react-router-dom"
+import { NavLink, redirect } from "react-router-dom"
 import { useEffect } from 'react';
+import axios from 'axios';
 
 export default function Main(){
     useEffect(() => {
@@ -22,4 +23,16 @@ export default function Main(){
             </div>
         </>
     )
+}
+
+export const mainLoader = async () => {
+    try{
+        const res = await axios.get("http://localhost:5000/root", {withCredentials: true});
+
+        if(res.status === 200){
+            return redirect("home");
+        }
+    } catch (error) {
+        return null;
+    }
 }

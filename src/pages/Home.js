@@ -9,9 +9,12 @@ export default function Home(){
 	useEffect(() => {
 		document.title = "Home";
 		document.body.classList.add("searchBody");
+		return () => {
+			document.body.classList.remove("searchBody");
+		}
 	}, []);
 
-	let { switchFunction, like }  = useOutletContext();
+	let { switchFunction, like, lastPlayedTrack }  = useOutletContext();
 
 	const navigate = useNavigate();
 	const songs = useLoaderData();
@@ -27,7 +30,7 @@ export default function Home(){
 			<br />
 			<div id="recommendedSongs">
 				<h2>Recommended Songs </h2>
-				<DisplaySong songs={songs} switchFunction={switchFunction} like={like}/>
+				<DisplaySong songs={songs} switchFunction={switchFunction} like={like} lastPlayedTrack={lastPlayedTrack}/>
 			</div>
 			<br />
 			<div id="topSongs">
