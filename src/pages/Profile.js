@@ -33,11 +33,7 @@ export default function ArtistName(){
 export const artistLoader = async ({ params }) => {
     const { artistName } = params;
 
-<<<<<<< HEAD
 	const res = await axios.get(`https://puzzled-worm-sweater.cyclic.app/profile/${artistName}`, {withCredentials: true});
-=======
-	const res = await axios.get(`http://localhost:5000/profile/${artistName}`, {withCredentials: true});
->>>>>>> 68eb1b32275fb829a9e08db0173281eed6313307
 
 	return res.data;
 }

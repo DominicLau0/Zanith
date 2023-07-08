@@ -74,11 +74,7 @@ export default function Search(){
 export const searchLoader = async ({ params }) => {
     const { searchValue } = params;
 
-<<<<<<< HEAD
 	const res = await axios.get(`https://puzzled-worm-sweater.cyclic.app/search/${searchValue}`, {withCredentials: true});
-=======
-	const res = await axios.get(`http://localhost:5000/search/${searchValue}`, {withCredentials: true});
->>>>>>> 68eb1b32275fb829a9e08db0173281eed6313307
 
 	return res.data;
 }
