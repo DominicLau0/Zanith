@@ -27,7 +27,11 @@ export default function Main(){
 
 export const mainLoader = async () => {
     try{
+<<<<<<< HEAD
         const res = await axios.get("https://puzzled-worm-sweater.cyclic.app/root", {withCredentials: true});
+=======
+        const res = await axios.get("http://localhost:5000/root", {withCredentials: true});
+>>>>>>> 68eb1b32275fb829a9e08db0173281eed6313307
 
         if(res.status === 200){
             return redirect("home");

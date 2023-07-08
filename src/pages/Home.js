@@ -47,7 +47,11 @@ export default function Home(){
 }
 
 export const homeLoader = async () => {
+<<<<<<< HEAD
 	const res = await axios.get("https://puzzled-worm-sweater.cyclic.app/home", {withCredentials: true});
+=======
+	const res = await axios.get("http://localhost:5000/home", {withCredentials: true});
+>>>>>>> 68eb1b32275fb829a9e08db0173281eed6313307
 
 	return res.data;
 }

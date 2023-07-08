@@ -51,7 +51,11 @@ function like(trackId){
 		}
 	}
 
+<<<<<<< HEAD
 	xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/like", false);
+=======
+	xhttp.open("POST", "http://localhost:5000/like", false);
+>>>>>>> 68eb1b32275fb829a9e08db0173281eed6313307
 	xhttp.withCredentials = true;
 	xhttp.setRequestHeader("Content-Type", "application/json");
 	xhttp.send(JSON.stringify({song: trackId}));
@@ -94,7 +98,11 @@ function calculateVolume(volume){
 function logout(){
     let xhttp = new XMLHttpRequest();
 
+<<<<<<< HEAD
     xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/logout", false);
+=======
+    xhttp.open("POST", "http://localhost:5000/logout", false);
+>>>>>>> 68eb1b32275fb829a9e08db0173281eed6313307
     xhttp.withCredentials = true;
     xhttp.send();
 }
@@ -246,11 +254,15 @@ export default function RootLayout(){
         <>
             <header>
                 <div className="linksHome">
+<<<<<<< HEAD
                     <input type="text" className="searchTextbox" id="search" name="search" placeholder='Search' onKeyDown={(e) => {
                         if(e.key === "Enter"){
                             searchSong();
                         }
                     }}></input>
+=======
+                    <input type="text" className="searchTextbox" id="search" name="search" placeholder='Search'></input>
+>>>>>>> 68eb1b32275fb829a9e08db0173281eed6313307
                     <button type="button" className="submitSong" onClick={() => searchSong()}>Search</button>
                     <NavLink to="home">Home</NavLink>
                     <NavLink to="upload">Upload</NavLink>
@@ -295,7 +307,11 @@ export default function RootLayout(){
 }
 
 export const rootLoader = async () => {
+<<<<<<< HEAD
 	const res = await axios.get("https://puzzled-worm-sweater.cyclic.app/root", {withCredentials: true});
+=======
+	const res = await axios.get("http://localhost:5000/root", {withCredentials: true});
+>>>>>>> 68eb1b32275fb829a9e08db0173281eed6313307
 
 	return res.data;
 }

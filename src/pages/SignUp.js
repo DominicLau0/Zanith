@@ -47,7 +47,11 @@ export default function SignUp(){
                 }
             }
     
+<<<<<<< HEAD
             xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/signup", false);
+=======
+            xhttp.open("POST", "http://localhost:5000/signup", false);
+>>>>>>> 68eb1b32275fb829a9e08db0173281eed6313307
             xhttp.setRequestHeader("Content-Type", "application/json");
             xhttp.send(JSON.stringify(personalInfo));
         }

@@ -42,7 +42,11 @@ export default function Login(){
                 }
             }
     
+<<<<<<< HEAD
             xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/login", false);
+=======
+            xhttp.open("POST", "http://localhost:5000/login", false);
+>>>>>>> 68eb1b32275fb829a9e08db0173281eed6313307
             xhttp.withCredentials = true;
             xhttp.setRequestHeader("Content-Type", "application/json");
             xhttp.send(JSON.stringify(userInfo));
