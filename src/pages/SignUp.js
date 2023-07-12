@@ -48,6 +48,7 @@ export default function SignUp(){
             }
     
             xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/signup", false);
+            xhttp.withCredentials = true;
             xhttp.setRequestHeader("Content-Type", "application/json");
             xhttp.send(JSON.stringify(personalInfo));
         }
