@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { NavLink, Outlet, useNavigate, useLoaderData } from "react-router-dom"
 import { useEffect } from 'react';
 import axios from 'axios';
@@ -7,10 +7,6 @@ let currentSong = document.createElement('audio');
 
 let lastPlayedTrack;
 let interval;
-let pictureIdGlobal;
-let usernameGlobal;
-let titleGlobal;
-let listen;
 let lastVolume = 0.8;
 const cloud_name = "dw5heht2b";
 
@@ -59,15 +55,6 @@ function like(trackId){
 
 function comment(){
 
-}
-
-/*Updates the current timestamp of the song*/
-function updateTimeStamp(){
-	interval = requestAnimationFrame(updateTimeStamp);
-	if(!isNaN(currentSong.duration)){
-		document.getElementById("songSlider").value = (currentSong.currentTime / currentSong.duration) * (currentSong.duration * 1000);
-		document.getElementById("beginningTime").textContent = calculateTime(currentSong.currentTime);
-	}
 }
 
 /*Converts the input to a time based on minutes:seconds*/
@@ -122,82 +109,92 @@ function mute(){
     }
 }
 
-function playSong(trackId, pictureId, username, title){
-    clearTimeout(listen);
-
+function playSong(trackId, pictureId){
     if(trackId === undefined || pictureId === undefined){
         return;
     }
 
     if(trackId !== lastPlayedTrack){
         if(lastPlayedTrack!==undefined){
-            pauseSong(lastPlayedTrack, pictureIdGlobal, usernameGlobal, titleGlobal);
+            pauseSong(lastPlayedTrack);
         }
         currentSong.src = `https://res.cloudinary.com/${cloud_name}/video/upload/${trackId}`;
         currentSong.load();
     }
 
+    cancelAnimationFrame(interval);
     displaySongImage(pictureId);
     currentSong.play();
-    interval = requestAnimationFrame(updateTimeStamp);
 
     document.getElementById(trackId).innerHTML = "pause_circle";
     document.getElementById("play_arrow").innerHTML = "pause";
-    document.getElementById("songTitle").innerHTML = title;        
-    document.getElementById("songArtist").innerHTML = username;
 
     lastPlayedTrack = trackId;
-    pictureIdGlobal = pictureId;
-    usernameGlobal = username;
-    titleGlobal = title;
-}
-
-function switchFunction(trackId, pictureId, username, title){
-    if(trackId !== lastPlayedTrack || currentSong.paused){
-        playSong(trackId, pictureId, username, title);
-    }else{
-        pauseSong(trackId, pictureId, username, title);
-    }
-}
-
-function footerSwitchFunction(){
-    if(currentSong.paused){
-        currentSong.play();
-        document.getElementById("play_arrow").innerHTML = "pause";
-		if(document.getElementById(lastPlayedTrack) !== null){
-			document.getElementById(lastPlayedTrack).innerHTML = "pause_circle";
-		}
-    }else{
-        currentSong.pause();
-        document.getElementById("play_arrow").innerHTML = "play_arrow";
-
-		if(document.getElementById(lastPlayedTrack) !== null){
-			document.getElementById(lastPlayedTrack).innerHTML = "play_circle";
-		}
-    }
 }
 
 //Displays the song image in the music player.
 function displaySongImage(pictureId){
     if(lastPlayedTrack !== undefined){
-        document.getElementById("songCover").innerHTML = `<img class="songImageCover", src="https://res.cloudinary.com/${cloud_name}/image/upload/w_65,h_65,c_fill,q_100/${pictureId}">`;
+        document.getElementById("imageSource").src = `https://res.cloudinary.com/${cloud_name}/image/upload/w_65,h_65,c_fill,q_100/${pictureId}`;
     }else{
-        document.getElementById("songCoverBackground").outerHTML = `<div id="songCover"><img class="songImageCover", src="https://res.cloudinary.com/${cloud_name}/image/upload/w_65,h_65,c_fill,q_100/${pictureId}"></div>`;
+        document.getElementById("songCoverBackground").outerHTML = `<div id="songCover"><img class="songImageCover" id="imageSource" src="https://res.cloudinary.com/${cloud_name}/image/upload/w_65,h_65,c_fill,q_100/${pictureId}"></div>`;
     }
 }
 
-/*Output the total duration of the song*/
-currentSong.onloadedmetadata = function(){
-    document.getElementById("endTime").innerHTML = calculateTime(currentSong.duration);
-    document.getElementById("songSlider").setAttribute('max', `${Math.floor(currentSong.duration * 1000)}`);
-};
-
 export default function RootLayout(){
+    const [songTitle, setSongTitle] = useState("Song Title");
+    const [songArtist, setSongArtist] = useState("Artist");
+    const [beginningTime, setBeginningTime] = useState("00:00");
+    const [endTime, setEndTime] = useState("00:00");
+
+    /*Output the total duration of the song*/
+    currentSong.onloadedmetadata = function(){
+        setEndTime(calculateTime(currentSong.duration));
+        document.getElementById("songSlider").setAttribute('max', `${Math.floor(currentSong.duration * 1000)}`);
+    };
+
+    function switchFunction(trackId, pictureId, username, title){
+        if(trackId !== lastPlayedTrack || currentSong.paused){
+            if(trackId !== lastPlayedTrack){
+                setSongTitle(title);
+                setSongArtist(username);
+            }
+            playSong(trackId, pictureId);
+            interval = requestAnimationFrame(updateTimeStamp);
+        }else{
+            pauseSong(trackId);
+        }
+    }
+
+    function footerSwitchFunction(){
+        if(currentSong.paused){
+            cancelAnimationFrame(interval);
+            currentSong.play();
+            interval = requestAnimationFrame(updateTimeStamp);
+            document.getElementById("play_arrow").innerHTML = "pause";
+            
+            if(document.getElementById(lastPlayedTrack) !== null){
+                document.getElementById(lastPlayedTrack).innerHTML = "pause_circle";
+            }
+        }else{
+            pauseSong(lastPlayedTrack);
+        }
+    }
+
+    /*Updates the current timestamp of the song*/
+    function updateTimeStamp(){
+        interval = requestAnimationFrame(updateTimeStamp);
+        if(!isNaN(currentSong.duration)){
+            document.getElementById("songSlider").value = (currentSong.currentTime / currentSong.duration) * (currentSong.duration * 1000);
+            setBeginningTime(calculateTime(currentSong.currentTime));
+        }
+    }
+
     useEffect(() => {
         let songSlider = document.getElementById("songSlider");
 
 		songSlider.addEventListener('input', () =>{
-			document.getElementById("beginningTime").textContent = calculateTime(document.getElementById("songSlider").value/1000);
+			setBeginningTime(calculateTime(document.getElementById("songSlider").value/1000));
 	
 			if(!currentSong.paused){
 				cancelAnimationFrame(interval);
@@ -225,7 +222,7 @@ export default function RootLayout(){
         });
 
 		currentSong.addEventListener('ended', function() {
-			pauseSong(lastPlayedTrack, pictureIdGlobal, usernameGlobal, titleGlobal);
+			pauseSong(lastPlayedTrack);
 			cancelAnimationFrame(interval);
 		});
     }, []);
@@ -277,12 +274,12 @@ export default function RootLayout(){
                         <i className="material-symbols-rounded iconStyles" style={{fontSize:"25px"}}>headphones</i>
                     </div>
                     <div className="titleAndArtist">
-                        <p className="musicPlayerTitle" id="songTitle">Song Title</p>
-                        <p className="musicPlayerArtist" id="songArtist">Artist</p>
+                        <p className="musicPlayerTitle">{songTitle}</p>
+                        <p className="musicPlayerArtist">{songArtist}</p>
                         <div className="timeStamp">
-                            <p id="beginningTime">00:00</p>
+                            <p className="beginningTime">{beginningTime}</p>
                             <input id="songSlider" type="range" min="0" max="1000" defaultValue="0" />
-                            <p id="endTime">00:00</p>
+                            <p className="endTime">{endTime}</p>
                         </div>
                     </div>
                 </div>

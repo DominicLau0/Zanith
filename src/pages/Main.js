@@ -6,6 +6,11 @@ import axios from 'axios';
 export default function Main(){
     useEffect(() => {
 		document.title = "Zanith";
+
+        document.body.classList.add("bodyColour");
+		return () => {
+			document.body.classList.remove("bodyColour");
+		}
 	}, []);
 
     return (
@@ -17,9 +22,12 @@ export default function Main(){
                 </div>
                 <h2>Zanith</h2>
             </header>
-            <div className="mainText">
-                <h1>Stream and Listen with Zanith</h1>
-                <h3>Upload | Listen | Distribute</h3>
+            <div>
+                <p className="mainText">Start your music career <br/> with <span className='gradientText'>Zanith</span></p>
+                <p className="subText">Meet a diverse set of upcoming artists <br/> and a platform to share your music to the world.</p>
+            </div>
+            <div className="">
+
             </div>
         </>
     )
