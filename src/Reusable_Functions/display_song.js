@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const cloud_name = "dw5heht2b";
 let lastPlayedTrack;
@@ -31,6 +32,8 @@ function increaseListenCount(trackId, pictureId, username, title, props){
 }
 
 export default function DisplaySong(props){
+    const navigate = useNavigate();
+
     return(
         <div className="songContainer">
             {props.songs.songs.map(song => (
@@ -52,8 +55,10 @@ export default function DisplaySong(props){
                         }
                     </div>
                     <div className="songTitleandListens">
-                        <p className="songTitle">{song.title}</p>
-                        <p className="songArtist">{song.username}</p>
+                        <div>
+                            <p onClick={() => navigate("/song/" + song.song)} className="songTitle">{song.title}</p>
+                            <p onClick={() => navigate("/profile/" + song.username)} className="songArtist">{song.username}</p>
+                        </div>
                         <div className="icon">
                             <i className="material-symbols-outlined" style={{fontSize:"18px"}}>play_arrow</i>
                             <p style={{fontSize:"14px"}} id={`listenAmount:${song.song}`}>{song.listens}</p>
@@ -81,18 +86,18 @@ export default function DisplaySong(props){
                             <div className="icon">
                                 {
 									(() => {
-										if(props.songs.like.filter(e => e.song === song.song).length > 0){
+										if(song.likes.includes(props.username)){
 											return (<i style={{fontSize:"15px", color: "lightcoral"}} className="material-symbols-outlined iconStyles" onClick={() => props.like(`${song.song}`)} id={`likeIcon:${song.song}`}>favorite</i>);
 										}else{
 											return(<i style={{fontSize:"15px"}} className="material-symbols-outlined iconStyles" onClick={() => props.like(`${song.song}`)} id={`likeIcon:${song.song}`}>favorite</i>);
 										}
 									})()
 								}
-                                <p style={{fontSize:"14px"}} id={`likeAmount:${song.song}`}>{song.likes}</p>
+                                <p style={{fontSize:"14px"}} id={`likeAmount:${song.song}`}>{song.likes.length}</p>
                             </div>
                             <div className="icon">
                                 <i className="material-symbols-outlined iconStyles" style={{fontSize:"15px"}}>comment</i>
-                                <p style={{fontSize:"14px"}}>{song.comments}</p>
+                                <p style={{fontSize:"14px"}}>{song.comments.length}</p>
                             </div>
                         </div>
                     </div>

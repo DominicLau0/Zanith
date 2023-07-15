@@ -258,7 +258,7 @@ export default function RootLayout(){
             </header>
 
             <main>
-                <Outlet context = {{switchFunction, like, lastPlayedTrack}}/>
+                <Outlet context = {{switchFunction, like, lastPlayedTrack, username}}/>
             </main>
 
             <footer>

@@ -7,8 +7,10 @@ body{
 }
 
 .bodyColour{
-    background: rgb(2,0,36);
-    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(6,79,80,1) 100%);
+    background: rgb(61,6,70);
+    background: linear-gradient(34deg, rgba(61,6,70,1) 15%, rgba(20,62,121,1) 56%, rgba(11,107,101,1) 81%, rgba(5,155,129,1) 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 header{
@@ -17,6 +19,10 @@ header{
     padding-left: 30px;
     position: sticky;
     top: 0;
+}
+
+.headerTransparent{
+    opacity: 0.8;
 }
 
 footer{
@@ -59,16 +65,15 @@ footer{
     font-size: 80px;
     text-align: left;
     font-family: 'Patua One', cursive;
+    margin-top: 10px;
 }
 
 .gradientText{
-    background: #ce959a;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #ce959a;
 }
 
 .subText{
-    margin-top: 140px;
+    margin-top: 220px;
     font-size: 30px;
     font-family: 'Roboto', sans-serif;
     color: rgb(194, 194, 194);
@@ -167,7 +172,7 @@ footer{
 }
 
 /*The username, password, and email textbox for the login/signup page*/
-.textbox, .searchTextbox{
+.textbox, .searchTextbox, .comment{
     background-color: #303030;
     padding: 10px;
     width: 350px;
@@ -192,6 +197,15 @@ textarea {
     resize: none;
     font-family: Arial;
     height: 200px;
+}
+
+.comment{
+    margin-left: 0px;
+    float: none;
+    height: 50px;
+    width: 600px;
+    background-color:  rgba(209, 209, 209, 0.952);
+    color: black;
 }
 
 /*Submits the login/signup info to the client side*/
@@ -232,13 +246,19 @@ a{
 }
 
 /*Div box for the profile pic in the profile page header*/
-#profileHeaderPicture{
+#profileHeaderPicture, .songHeaderPicture{
     background-color: lightslategray;
     height: 200px;
     padding: 0px;
     margin: 0px;
     width: 1900px;
     display: flex;
+}
+
+.songHeaderPicture{
+    background-color: rgba(209, 209, 209, 0.952);
+    color: black;
+    height: 300px;
 }
 
 /*Container for the profile which contains the songDisplay and the albumDisplay*/
@@ -327,6 +347,11 @@ hr{
     white-space: nowrap; 
     overflow: hidden;
     max-width: 181px;
+}
+
+.songTitle:hover, .songArtist:hover{
+    cursor: pointer;
+    color: #ce959a;
 }
 
 .songArtist{
@@ -534,4 +559,26 @@ hr{
 
 .recordLabelImage:hover{
     opacity: 0.8;
+}
+
+.pageNotFound{
+    margin-top: 70px;
+    text-align: center;
+}
+
+.songTitleFontSize{
+    margin-left: 20px;
+    font-size: 30px;
+    margin-bottom: 0px;
+}
+
+.songArtistFontSize{
+    margin-top: 0px;
+    margin-left: 20px;
+    font-size: 20px;
+    color: black;
+}
+
+.songArtistFontSize:hover{
+    color: #88121c;
 }

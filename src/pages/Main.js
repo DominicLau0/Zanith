@@ -15,7 +15,7 @@ export default function Main(){
 
     return (
         <>
-            <header>
+            <header className="headerTransparent">
                 <div className="indexLinks">
                     <NavLink to="signup" className="signupLoginButton">Sign up</NavLink>
                     <NavLink to="login" className="signupLoginButton">Log in</NavLink>
@@ -25,9 +25,6 @@ export default function Main(){
             <div>
                 <p className="mainText">Start your music career <br/> with <span className='gradientText'>Zanith</span></p>
                 <p className="subText">Meet a diverse set of upcoming artists <br/> and a platform to share your music to the world.</p>
-            </div>
-            <div className="">
-
             </div>
         </>
     )

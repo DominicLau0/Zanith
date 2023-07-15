@@ -14,7 +14,7 @@ export default function Home(){
 		}
 	}, []);
 
-	let { switchFunction, like, lastPlayedTrack }  = useOutletContext();
+	let { switchFunction, like, lastPlayedTrack, username }  = useOutletContext();
 
 	const navigate = useNavigate();
 	const songs = useLoaderData();
@@ -30,7 +30,7 @@ export default function Home(){
 			<br />
 			<div id="recommendedSongs">
 				<h2>Recommended Songs </h2>
-				<DisplaySong songs={songs} switchFunction={switchFunction} like={like} lastPlayedTrack={lastPlayedTrack}/>
+				<DisplaySong songs={songs} switchFunction={switchFunction} like={like} lastPlayedTrack={lastPlayedTrack} username={username}/>
 			</div>
 			<br />
 			<div id="topSongs">

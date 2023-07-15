@@ -10,6 +10,8 @@ import Upload from './pages/Upload.js';
 import Profile, {artistLoader} from './pages/Profile.js'
 import RecordLabel from './pages/RecordLabel.js'
 import Search, {searchLoader} from './pages/Search.js'
+import Song, {songLoader} from './pages/Song.js'
+import PageNotFound from './pages/PageNotFound'
 
 import RootLayout, {rootLoader} from './layouts/RootLayout'
 
@@ -26,7 +28,11 @@ const router = createBrowserRouter(
 				<Route path="profile/:artistName" element={<Profile/>} loader={artistLoader} />
 				<Route path="recordlabel/:labelName" element={<RecordLabel/>} />
 				<Route path="search/:searchValue" element={<Search/>} loader={searchLoader}/>
+				<Route path="/song/:songName" element={<Song/>} loader={songLoader}/>
+				<Route path="*" element={<PageNotFound/>}/>
 			</Route>
+
+
 		</Route>
 	)
 )
