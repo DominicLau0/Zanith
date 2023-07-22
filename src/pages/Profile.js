@@ -67,6 +67,11 @@ export default function ArtistName(){
 
 	useEffect(() => {
 		document.title = artistName + ' on Zanith';
+
+        document.body.classList.add("profileSongBody");
+		return () => {
+			document.body.classList.remove("profileSongBody");
+		}
 	}, []);
 
     let { switchFunction, like, lastPlayedTrack, username }  = useOutletContext();

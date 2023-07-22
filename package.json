@@ -13,6 +13,7 @@
     "react-helmet": "^6.1.0",
     "react-router-dom": "^6.13.0",
     "react-scripts": "^2.1.8",
+    "universal-cookie": "^4.0.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { NavLink, Outlet, useNavigate, useLoaderData } from "react-router-dom"
 import { useEffect } from 'react';
+import Cookies from 'universal-cookie'
 import axios from 'axios';
 
 let currentSong = document.createElement('audio');
@@ -9,6 +10,8 @@ let lastPlayedTrack;
 let interval;
 let lastVolume = 0.8;
 const cloud_name = "dw5heht2b";
+
+const cookies = new Cookies();
 
 function pauseSong(trackId){
 	currentSong.pause();
@@ -51,10 +54,6 @@ function like(trackId){
 	xhttp.withCredentials = true;
 	xhttp.setRequestHeader("Content-Type", "application/json");
 	xhttp.send(JSON.stringify({song: trackId}));
-}
-
-function comment(){
-
 }
 
 /*Converts the input to a time based on minutes:seconds*/
@@ -122,6 +121,9 @@ function playSong(trackId, pictureId){
         currentSong.load();
     }
 
+    cookies.set("song", trackId, {maxAge: 1000*60*60*24*30});
+	cookies.set("pictures", pictureId, {maxAge: 1000*60*60*24*30});
+
     cancelAnimationFrame(interval);
     displaySongImage(pictureId);
     currentSong.play();
@@ -134,7 +136,7 @@ function playSong(trackId, pictureId){
 
 //Displays the song image in the music player.
 function displaySongImage(pictureId){
-    if(lastPlayedTrack !== undefined){
+    if(cookies.get("pictures") !== undefined && document.getElementById("imageSource") !== null){
         document.getElementById("imageSource").src = `https://res.cloudinary.com/${cloud_name}/image/upload/w_65,h_65,c_fill,q_100/${pictureId}`;
     }else{
         document.getElementById("songCoverBackground").outerHTML = `<div id="songCover"><img class="songImageCover" id="imageSource" src="https://res.cloudinary.com/${cloud_name}/image/upload/w_65,h_65,c_fill,q_100/${pictureId}"></div>`;
@@ -142,9 +144,27 @@ function displaySongImage(pictureId){
 }
 
 export default function RootLayout(){
-    const [songTitle, setSongTitle] = useState("Song Title");
-    const [songArtist, setSongArtist] = useState("Artist");
-    const [beginningTime, setBeginningTime] = useState("00:00");
+	let songTitleString;
+	let songArtistString;
+	let beginningTimeString;
+
+	if(cookies.get("title") === undefined || cookies.get("artist") === undefined || cookies.get("timeStamp") === undefined || cookies.get("song") === undefined){
+		songTitleString = "Song Title";
+		songArtistString = "Artist";
+		beginningTimeString = "00:00";
+	}else{
+		songTitleString = cookies.get("title");
+		songArtistString = cookies.get("artist");
+		beginningTimeString = cookies.get("timeStamp");
+		//currentSong.src = `https://res.cloudinary.com/${cloud_name}/video/upload/${cookies.get("song")}`
+	}
+
+	if(cookies.get("timeStamp") === undefined){
+	}
+
+    const [songTitle, setSongTitle] = useState(songTitleString);
+    const [songArtist, setSongArtist] = useState(songArtistString);
+    const [beginningTime, setBeginningTime] = useState(beginningTimeString);
     const [endTime, setEndTime] = useState("00:00");
 
     /*Output the total duration of the song*/
@@ -158,6 +178,8 @@ export default function RootLayout(){
             if(trackId !== lastPlayedTrack){
                 setSongTitle(title);
                 setSongArtist(username);
+				cookies.set("title", title, {maxAge: 1000*60*60*24*30});
+				cookies.set("artist", username, {maxAge: 1000*60*60*24*30});
             }
             playSong(trackId, pictureId);
             interval = requestAnimationFrame(updateTimeStamp);
@@ -187,6 +209,7 @@ export default function RootLayout(){
         if(!isNaN(currentSong.duration)){
             document.getElementById("songSlider").value = (currentSong.currentTime / currentSong.duration) * (currentSong.duration * 1000);
             setBeginningTime(calculateTime(currentSong.currentTime));
+			cookies.set("timeStamp", calculateTime(currentSong.currentTime), {maxAge: 1000*60*60*24*30});
         }
     }
 
@@ -270,9 +293,23 @@ export default function RootLayout(){
                     <i className="material-symbols-rounded iconStyles" style={{ fontSize:`20px` }} id="repeat" onClick={() => repeat()}>repeat</i>
                 </div>
                 <div className="musicDetails">
-                    <div id="songCoverBackground">
-                        <i className="material-symbols-rounded iconStyles" style={{fontSize:"25px"}}>headphones</i>
-                    </div>
+					{
+						(() => {
+							if(cookies.get("pictures") === undefined){
+								return(
+									<div id="songCoverBackground">
+										<i className="material-symbols-rounded iconStyles" style={{fontSize:"25px"}}>headphones</i>
+									</div>
+								)
+							}else{
+								return(
+									<div id="songCover">
+										<img className="songImageCover" id="imageSource" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_65,h_65,c_fill,q_100/${cookies.get("pictures")}`}></img>
+									</div>
+								)
+							}
+						})()
+					}
                     <div className="titleAndArtist">
                         <p className="musicPlayerTitle">{songTitle}</p>
                         <p className="musicPlayerArtist">{songArtist}</p>

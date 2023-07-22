@@ -209,7 +209,7 @@ textarea {
 }
 
 /*Submits the login/signup info to the client side*/
-.submit, .submit:active, .submitSong, .submitSongs{
+.submit, .submit:active, .submitSong, .submitSongs, .commentButtonModifier{
     background-color: #444444;
     padding: 9px;
     color: lightgrey;
@@ -218,7 +218,7 @@ textarea {
     border: none;
     border-radius: 5px;
 }
-.submit:active, .submitSong:active, .submitSongs:active{
+.submit:active, .submitSong:active, .submitSongs:active, .commentButtonModifier:active{
     background-color: black;
 }
 
@@ -268,11 +268,9 @@ a{
 
 /*Displays all the songs in one section and displays all the albums in the other section*/
 .songDisplay, .albumDisplay{
-    background-color: #292929;
     padding: 1px;
     padding-left: 20px;
     width: 100%;
-    height: 700px;
 }
 
 /*Displays all the albums in a section*/
@@ -534,6 +532,10 @@ hr{
     background-color: #2e2e2e;
 }
 
+.profileSongBody{
+    background-color: #292929;
+}
+
 .searchArtistContainer{
     width: 350px;
     height: 70px;
@@ -581,4 +583,33 @@ hr{
 
 .songArtistFontSize:hover{
     color: #88121c;
+}
+
+.songCoverImage{
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.commentSection{
+    background-color: #C0C0C0;
+    display: flex;
+    flex-direction: row;
+    margin-right: 20px;
+}
+
+.commentBar{
+    color: black;
+    margin: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    word-wrap: break-word
+}
+
+.commentButtonModifier{
+    align-self: start;
+    float: right;
+    margin-top: 5px;
+    margin-right: 5px;
 }
