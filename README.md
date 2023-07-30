@@ -47,4 +47,5 @@ Users can search for artists and songs that are on Zanith and it should display 
 Users can navigate to individual songs and see basic information about the songs.
 Commenting on songs are now possible and they now display the date and time of when it was commented.
 
-![image](https://github.com/DominicLau0/Zanith/assets/129682941/04b1f344-d375-4fe3-b1da-56ef2a20f24a)
+![image](https://github.com/DominicLau0/Zanith/assets/129682941/a49178b7-9914-4bc2-b272-9e4af0e653f7)
+
