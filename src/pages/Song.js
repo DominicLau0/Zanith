@@ -87,7 +87,7 @@ export default function Song(){
 				<div className="songDisplay">
 					<h3>Description</h3>
 					<hr />
-					<textarea disabled className="description">{song.song[0].description}</textarea>
+					<pre className="description">{song.song[0].description}</pre>
 					<br/>
 					<h3>{numberOfComments} Comments</h3>
 					<hr />

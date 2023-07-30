@@ -212,6 +212,8 @@ textarea {
     background-color: #585858;
     color: lightgrey;
     width: 1850px;
+    height: auto;
+    font-family: Arial;
 }
 
 /*Submits the login/signup info to the client side*/
