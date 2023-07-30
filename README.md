@@ -4,9 +4,6 @@ Zanith is a music streaming website where users can upload their songs to the we
 
 Website: https://zanith.me or https://zanith-server.onrender.com.
 
-### Notes
-- Users cannot comment on songs just yet.
-
 ## New Users
 Here new users can sign up and existing users can login.
 
@@ -52,5 +49,6 @@ Users can search for artists and songs that are on Zanith and it should display 
 
 ## Songs
 Users can navigate to individual songs and see basic information about the songs.
+Commenting on songs are now possible and they now display the date and time of when it was commented.
 
-![image](https://github.com/DominicLau0/Zanith/assets/129682941/69028a13-b43e-4774-a567-b72ee9462d0b)
+![image](https://github.com/DominicLau0/Zanith/assets/129682941/04b1f344-d375-4fe3-b1da-56ef2a20f24a)
