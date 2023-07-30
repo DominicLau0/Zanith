@@ -64,8 +64,16 @@ export default function Song(){
 		textarea.addEventListener('input', autoResize, false);
 
 		function autoResize() {
+			let scrollLeft = window.scrollX ||
+			(document.documentElement || document.body.parentNode || document.body).scrollLeft;
+
+			let scrollTop  = window.scrollY ||
+			(document.documentElement || document.body.parentNode || document.body).scrollTop;
+
 			this.style.height = 'auto';
 			this.style.height = this.scrollHeight + 'px';
+
+			window.scrollTo(scrollLeft, scrollTop);
 		}
 
 		document.body.classList.add("profileSongBody");
