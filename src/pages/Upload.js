@@ -182,7 +182,7 @@ export default function Upload(){
 					<br/>
 					<input className="textbox" list="genreList" id="genre" onKeyUp={submitSongs} placeholder="Select the genre"/>
 					<datalist id="genreList">
-						<option value="classNameical"></option>
+						<option value="Classical"></option>
 						<option value="Rock"></option>
 						<option value="Electronic"></option>
 						<option value="Hip hop"> </option>

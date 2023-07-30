@@ -1,21 +1,67 @@
-import React from 'react'
+import React, { createElement } from 'react'
 import { useLoaderData, NavLink } from "react-router-dom"
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import DisplayComments from "../Reusable_Functions/display_comments.js";
 
 export default function Song(){
     const cloud_name = "dw5heht2b";
+	const song = useLoaderData();
 
 	const [comments, setComments] = useState("");
+	const [commentState, setCommentState] = useState(song.song[0].comments);
+
+    {commentState.map(comments => {
+        comments.id = crypto.randomUUID();
+    })}
+
+    function deleteComment(commentId){
+        let commentText = document.getElementById(commentId).textContent;
+    
+        let xhttp = new XMLHttpRequest();
+    
+        xhttp.onreadystatechange = function(){
+            if(this.readyState === 4 && this.status === 200){
+                const newComments = commentState.filter((item) => item[Object.keys(item)[0]] !== commentText);
+                setCommentState(newComments);
+            }
+        }
+    
+        xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/deleteComment", false);
+        xhttp.withCredentials = true;
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(JSON.stringify({comment: commentText, song: song.song[0].song, date: new Date()}));
+    }
 
 	function comment(){
-		if(comments !== ""){
-			document.getElementById("commentSection").innerHTML += `<div class="commentSection"><div class="commentBar"><p>${comments}</p></div><button class='commentButtonModifier' onclick="delete()">Delete</button></div><br>`;
+		if(comments === ""){
+			return;
 		}
+
+		let xhttp = new XMLHttpRequest();
+
+		xhttp.onreadystatechange = function(){
+			if(this.readyState === 4 && this.status === 200){
+				let uuid = crypto.randomUUID();
+
+				let commentText = {[song.username]: comments, "id": uuid};
+
+				const newComments = [...commentState, commentText];
+				setCommentState(newComments);
+
+				document.getElementById("commentTextArea").value = "";
+				setComments("");
+			}
+		}
+	
+		xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/comment", false);
+		xhttp.withCredentials = true;
+		xhttp.setRequestHeader("Content-Type", "application/json");
+		xhttp.send(JSON.stringify({comment: comments, song: song.song[0].song}));
 	}
 
     useEffect(() => {
-		document.title = "Zanith";
+		document.title = song.song[0].title + " by " + song.song[0].username;
 		
 		let textarea = document.querySelector(".comment");
 		textarea.addEventListener('input', autoResize, false);
@@ -30,8 +76,6 @@ export default function Song(){
 			document.body.classList.remove("profileSongBody");
 		}
 	}, []);
-
-    const song = useLoaderData();
 
     return (
         <>
@@ -50,13 +94,11 @@ export default function Song(){
 					<br/>
 					<h3>Comments</h3>
 					<hr />
-					<textarea className="comment" name="comment" onChange={e => setComments(e.target.value)} placeholder="Comment on this song"></textarea>
+					<textarea className="comment" name="comment" onChange={e => setComments(e.target.value)} id="commentTextArea" placeholder="Comment on this song"></textarea>
 					<div>
 						<button className='submitSong' onClick={comment}>Comment</button>
 					</div>
-					<br/>
-					<div id="commentSection">
-					</div>
+					<DisplayComments song={song} deleteComment={deleteComment} commentState={commentState}/>
 				</div>
 			</div>
         </>
