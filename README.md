@@ -2,7 +2,7 @@
 ## Description
 Zanith is a music streaming website where users can upload their songs to the website which allows other users to listen to it. Users can do basic things such as like and comment a song, as well as search for artists and songs on Zanith. Users are also allowed to upload songs that they own to the website.
 
-Website: https://zanith-server.onrender.com.
+Website: https://zanith.me or https://zanith-server.onrender.com.
 
 ### Notes
 - Users cannot comment on songs just yet.
@@ -47,4 +47,10 @@ Here is the profile page of the user "ClaytonAQDF". It lists all the songs that 
 ## Search
 Users can search for artists and songs that are on Zanith and it should display the name of the artist, as well as all the songs that they've uploaded.
 
-![image](https://user-images.githubusercontent.com/129682941/236644533-575e48f3-1923-4b43-93cb-da88ad400ce2.png)
+![image](https://github.com/DominicLau0/Zanith/assets/129682941/4d9c8547-98d0-4158-a711-f8eafe3176a7)
+
+
+## Songs
+Users can navigate to individual songs and see basic information about the songs.
+
+![image](https://github.com/DominicLau0/Zanith/assets/129682941/69028a13-b43e-4774-a567-b72ee9462d0b)
