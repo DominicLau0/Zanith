@@ -10,27 +10,23 @@ export default function Song(){
 
 	const [comments, setComments] = useState("");
 	const [commentState, setCommentState] = useState(song.song[0].comments);
+	const [numberOfComments, setNumberOfComments] = useState(song.song[0].comments.length);
 
-    {commentState.map(comments => {
-        comments.id = crypto.randomUUID();
-    })}
-
-    function deleteComment(commentId){
-        let commentText = document.getElementById(commentId).textContent;
-    
+    function deleteComment(commentId){ 
         let xhttp = new XMLHttpRequest();
     
         xhttp.onreadystatechange = function(){
             if(this.readyState === 4 && this.status === 200){
-                const newComments = commentState.filter((item) => item[Object.keys(item)[0]] !== commentText);
+                const newComments = commentState.filter((item) => item[Object.keys(item)[1]] !== commentId);
                 setCommentState(newComments);
+				setNumberOfComments(numberOfComments => --numberOfComments);
             }
         }
     
         xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/deleteComment", false);
         xhttp.withCredentials = true;
         xhttp.setRequestHeader("Content-Type", "application/json");
-        xhttp.send(JSON.stringify({comment: commentText, song: song.song[0].song, date: new Date()}));
+        xhttp.send(JSON.stringify({commentId: commentId, song: song.song[0].song}));
     }
 
 	function comment(){
@@ -38,26 +34,27 @@ export default function Song(){
 			return;
 		}
 
+		let uuid = crypto.randomUUID();
+		let date = new Date();
 		let xhttp = new XMLHttpRequest();
 
 		xhttp.onreadystatechange = function(){
 			if(this.readyState === 4 && this.status === 200){
-				let uuid = crypto.randomUUID();
-
-				let commentText = {[song.username]: comments, "id": uuid};
+				let commentText = {[song.username]: comments, "id": uuid, "date": date};
 
 				const newComments = [...commentState, commentText];
 				setCommentState(newComments);
 
 				document.getElementById("commentTextArea").value = "";
 				setComments("");
+				setNumberOfComments(numberOfComments => ++numberOfComments);
 			}
 		}
 	
 		xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/comment", false);
 		xhttp.withCredentials = true;
 		xhttp.setRequestHeader("Content-Type", "application/json");
-		xhttp.send(JSON.stringify({comment: comments, song: song.song[0].song}));
+		xhttp.send(JSON.stringify({comment: comments, song: song.song[0].song, uuid: uuid, date: date}));
 	}
 
     useEffect(() => {
@@ -90,9 +87,9 @@ export default function Song(){
 				<div className="songDisplay">
 					<h3>Description</h3>
 					<hr />
-					<p>{song.song[0].description}</p>
+					<textarea disabled className="description">{song.song[0].description}</textarea>
 					<br/>
-					<h3>Comments</h3>
+					<h3>{numberOfComments} Comments</h3>
 					<hr />
 					<textarea className="comment" name="comment" onChange={e => setComments(e.target.value)} id="commentTextArea" placeholder="Comment on this song"></textarea>
 					<div>

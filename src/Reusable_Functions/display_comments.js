@@ -7,7 +7,15 @@ export default function DisplayComments(props){
                 return(
                     <div className="commentSection" key={comments.id} id={`comment-section:${comments.id}`}>
                         <div className="commentBar">
-                            <p className="usernameComment">{Object.keys(comments)[0]}</p>
+                            {
+                                (() => {
+                                    let date = new Date(comments[Object.keys(comments)[2]]);
+
+                                    return(
+                                        <p className="usernameComment">{Object.keys(comments)[0]} <span className="dateCommentStyle" title={date.toString()}>{date.toDateString() + " @ " + date.toLocaleTimeString()}</span></p>
+                                    )
+                                })()
+                            }
                             <p className="commentText" id={comments.id}>{comments[Object.keys(comments)[0]]}</p>
                         </div>
                         {

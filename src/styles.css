@@ -172,7 +172,7 @@ footer{
 }
 
 /*The username, password, and email textbox for the login/signup page*/
-.textbox, .searchTextbox, .comment{
+.textbox, .searchTextbox, .comment, .description{
     background-color: #303030;
     padding: 10px;
     width: 350px;
@@ -199,13 +199,19 @@ textarea {
     height: 200px;
 }
 
-.comment{
+.comment, .description{
     margin-left: 0px;
     float: none;
     height: 50px;
     width: 600px;
     background-color:  rgba(209, 209, 209, 0.952);
     color: black;
+}
+
+.description{
+    background-color: #585858;
+    color: lightgrey;
+    width: 1850px;
 }
 
 /*Submits the login/signup info to the client side*/
@@ -602,9 +608,6 @@ hr{
     width: 95%;
 }
 
-.buttonCommentBar{
-}
-
 .commentButtonModifier{
     align-self: start;
     float: right;
@@ -620,4 +623,11 @@ hr{
 .commentText{
     margin-top: 0px;
     color: #e9e9e9;
+}
+
+.dateCommentStyle{
+    font-size: 13px;
+    color: rgb(167, 167, 167);
+    font-weight: lighter;
+    float: right;
 }
