@@ -5,11 +5,7 @@ Zanith is a music streaming website where users can upload their songs to the we
 Website: https://zanith.me or https://zanith-server.onrender.com.
 
 ## New Users
-Here new users can sign up and existing users can login.
-
-![image](https://user-images.githubusercontent.com/129682941/236559205-889f074b-4028-43fd-a606-8c9ea84302f8.png)
-![image](https://user-images.githubusercontent.com/129682941/236559518-ef4e9f44-a4e5-44d4-8518-ae844a67e994.png)
-
+New users have to signup here: https://zanith.me/login.
 
 ## Homepage
 ### Introduction
@@ -18,7 +14,7 @@ This is the homepage of Zanith. Here users can explore different record labels a
 
 Since I haven't really figured out how to implement the recommendation system, for now the homepage is the same for all users.
 
-![image](https://user-images.githubusercontent.com/129682941/236643561-95a49d35-e366-43e1-811c-c6693f02c250.png)
+![image](https://github.com/DominicLau0/Zanith/assets/129682941/fa51da03-2660-4d82-84d6-f2527a7a3afc)
 
 
 ### Record Labels
