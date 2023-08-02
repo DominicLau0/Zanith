@@ -96,7 +96,7 @@ export default function DisplaySong(props){
                                 <p style={{fontSize:"14px"}} id={`likeAmount:${song.song}`}>{song.likes.length}</p>
                             </div>
                             <div className="icon">
-                                <i className="material-symbols-outlined iconStyles" style={{fontSize:"15px"}}>comment</i>
+                                <i className="material-symbols-outlined iconStyles" style={{fontSize:"15px"}} onClick={() => navigate("/song/" + song.song +"/#commentHeader")}>comment</i>
                                 <p style={{fontSize:"14px"}}>{song.comments.length}</p>
                             </div>
                         </div>

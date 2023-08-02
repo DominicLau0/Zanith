@@ -1,5 +1,5 @@
-import React, { createElement } from 'react'
-import { useLoaderData, NavLink } from "react-router-dom"
+import React from 'react'
+import { useLoaderData, NavLink, useLocation } from "react-router-dom"
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import DisplayComments from "../Reusable_Functions/display_comments.js";
@@ -7,6 +7,14 @@ import DisplayComments from "../Reusable_Functions/display_comments.js";
 export default function Song(){
     const cloud_name = "dw5heht2b";
 	const song = useLoaderData();
+
+	const { hash } = useLocation();
+
+	function scrollToComments(){
+		if(hash === "#commentHeader"){
+			document.getElementById("commentHeader").scrollIntoView();
+		}
+	}
 
 	const [comments, setComments] = useState("");
 	const [commentState, setCommentState] = useState(song.song[0].comments);
@@ -59,6 +67,8 @@ export default function Song(){
 
     useEffect(() => {
 		document.title = song.song[0].title + " by " + song.song[0].username;
+
+		scrollToComments();
 		
 		let textarea = document.querySelector(".comment");
 		textarea.addEventListener('input', autoResize, false);
@@ -86,9 +96,39 @@ export default function Song(){
         <>
             <div className="songHeaderPicture">
 				<img className="songCoverImage" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_300,h_300,c_fill,q_100/${song.song[0].picture}`}  alt={`${song.song[0].title}`}/>
-                <div>
-                    <h1 className="songTitleFontSize">{song.song[0].title}</h1>
+                <div className="songTopInfo">
+                    <h1 className="songTitleFontSize">{song.song[0].title}
+					{
+						(() => {
+							let date = new Date(song.song[0].date);
+
+							return(
+								<span className="dateSongStyle" title={date.toString()}>{date.toDateString()}</span>
+							)
+						})()
+					}
+					{
+						(() => {
+							if(song.song[0].genre === "Classical"){
+								return(<span className="genreDark genreClassical">{song.song[0].genre}</span>)
+							}else if(song.song[0].genre === "Rock"){
+								return(<span className="genreDark genreRock">{song.song[0].genre}</span>)
+							}else if(song.song[0].genre === "Electronic"){
+								return(<span className="genreDark genreElectronicDark">{song.song[0].genre}</span>)
+							}else if(song.song[0].genre === "Hip Hop"){
+								return(<span className="genreDark genreHipHop">{song.song[0].genre}</span>)
+							}else if(song.song[0].genre === "Rap"){
+								return(<span className="genreDark genreRap">{song.song[0].genre}</span>)
+							}else{
+								return(<span className="genreDark genreOther">{song.song[0].genre}</span>)
+							}
+						})()
+					}
+					</h1>
 					<NavLink to={"/profile/" + song.song[0].username} className="songArtistFontSize">{song.song[0].username}</NavLink>
+					<br/>
+					<i className="material-symbols-outlined" style={{marginTop: "190px", marginLeft: "15px"}}>play_arrow</i>
+					<span className="songListenCount">{song.song[0].listens}</span>
                 </div>
             </div>
 			<div className="profileContainer">
@@ -97,7 +137,7 @@ export default function Song(){
 					<hr />
 					<pre className="description">{song.song[0].description}</pre>
 					<br/>
-					<h3>{numberOfComments} Comments</h3>
+					<h3 id="commentHeader">{numberOfComments} Comments</h3>
 					<hr />
 					<textarea className="comment" name="comment" onChange={e => setComments(e.target.value)} id="commentTextArea" placeholder="Comment on this song"></textarea>
 					<div>

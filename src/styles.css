@@ -388,7 +388,7 @@ hr{
 }
 
 /*Generate custom genre tags*/
-.genreClassical, .genreRock, .genreElectronic, .genreHipHop, .genreRap, .genreOther{
+.genreClassical, .genreRock, .genreElectronic, .genreHipHop, .genreRap, .genreOther, .genreElectronicDark, .genreDark{
 	padding-top: 2px;
 	padding-bottom: 2px;
 	padding-left: 6px;
@@ -405,7 +405,7 @@ hr{
     text-overflow: ellipsis;
     white-space: nowrap; 
     overflow: hidden;
-    max-width: 50px;
+    max-width: 82px;
 }
 
 .genreClassical{
@@ -436,6 +436,20 @@ hr{
 .genreOther{
 	border: 2px solid lightseagreen;
 	color: lightseagreen;
+}
+
+.genreDark{
+    max-width: none;
+    float: none;
+    margin-left: 10px;
+    font-size: 13px;
+    border-radius: 20px;
+    vertical-align: middle;
+}
+
+.genreElectronicDark{
+    border: 2px solid rgb(55, 178, 255);
+    color: rgb(55, 178, 255);
 }
 
 /*Contains the likes and comments icon and stats*/
@@ -582,6 +596,10 @@ hr{
     margin-bottom: 0px;
 }
 
+.songTopInfo{
+    width: 100%;
+}
+
 .songArtistFontSize{
     margin-top: 0px;
     margin-left: 20px;
@@ -627,9 +645,22 @@ hr{
     color: #e9e9e9;
 }
 
-.dateCommentStyle{
+.dateCommentStyle, .dateSongStyle{
     font-size: 13px;
     color: rgb(167, 167, 167);
     font-weight: lighter;
     float: right;
+}
+
+.dateSongStyle{
+    color: rgb(56, 56, 56);
+    font-weight: bold;
+    margin-top: 10px;
+    margin-right: 40px;
+    font-size: 15px
+}
+
+.songListenCount{
+    vertical-align: super;
+    margin-top: 190px;
 }
