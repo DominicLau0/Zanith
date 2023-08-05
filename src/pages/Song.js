@@ -20,22 +20,32 @@ export default function Song(){
 	const [commentState, setCommentState] = useState(song.song[0].comments);
 	const [numberOfComments, setNumberOfComments] = useState(song.song[0].comments.length);
 
-    function deleteComment(commentId){ 
-        let xhttp = new XMLHttpRequest();
-    
-        xhttp.onreadystatechange = function(){
-            if(this.readyState === 4 && this.status === 200){
-                const newComments = commentState.filter((item) => item[Object.keys(item)[1]] !== commentId);
-                setCommentState(newComments);
-				setNumberOfComments(numberOfComments => --numberOfComments);
-            }
-        }
-    
-        xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/deleteComment", false);
-        xhttp.withCredentials = true;
-        xhttp.setRequestHeader("Content-Type", "application/json");
-        xhttp.send(JSON.stringify({commentId: commentId, song: song.song[0].song}));
-    }
+	function like(){
+		let likeAmount;
+		let newLike;
+	
+		let xhttp = new XMLHttpRequest();
+	
+		xhttp.onreadystatechange = function(){
+			if(this.readyState === 4 && this.status === 200){
+				likeAmount = JSON.parse(this.responseText).like;
+				newLike = JSON.parse(this.responseText).newLike;
+				
+				document.getElementById("likeButton").childNodes[0].nodeValue = likeAmount;
+		
+				if(newLike === true){
+					document.getElementById(`likeButton`).className = "songListenCount likeButtonLiked";
+				}else{
+					document.getElementById(`likeButton`).className = "songListenCount likeButton";
+				}
+			}
+		}
+	
+		xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/like", false);
+		xhttp.withCredentials = true;
+		xhttp.setRequestHeader("Content-Type", "application/json");
+		xhttp.send(JSON.stringify({song: song.song[0].song}));
+	}
 
 	function comment(){
 		if(comments === ""){
@@ -64,6 +74,23 @@ export default function Song(){
 		xhttp.setRequestHeader("Content-Type", "application/json");
 		xhttp.send(JSON.stringify({comment: comments, song: song.song[0].song, uuid: uuid, date: date}));
 	}
+
+    function deleteComment(commentId){ 
+        let xhttp = new XMLHttpRequest();
+    
+        xhttp.onreadystatechange = function(){
+            if(this.readyState === 4 && this.status === 200){
+                const newComments = commentState.filter((item) => item[Object.keys(item)[1]] !== commentId);
+                setCommentState(newComments);
+				setNumberOfComments(numberOfComments => --numberOfComments);
+            }
+        }
+    
+        xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/deleteComment", false);
+        xhttp.withCredentials = true;
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(JSON.stringify({commentId: commentId, song: song.song[0].song}));
+    }
 
     useEffect(() => {
 		document.title = song.song[0].title + " by " + song.song[0].username;
@@ -125,10 +152,29 @@ export default function Song(){
 						})()
 					}
 					</h1>
-					<NavLink to={"/profile/" + song.song[0].username} className="songArtistFontSize">{song.song[0].username}</NavLink>
-					<br/>
-					<i className="material-symbols-outlined" style={{marginTop: "190px", marginLeft: "15px"}}>play_arrow</i>
-					<span className="songListenCount">{song.song[0].listens}</span>
+					<NavLink to={"/profile/" + song.song[0].username} className="songArtistFontSize" style={{display: "inline-block"}}>{song.song[0].username}</NavLink>
+					{/*<button>Play</button>*/}
+					<div className="controls">
+						<i className="songPlayIcon material-symbols-outlined">play_arrow</i>
+						<span className="songListenCount">{song.song[0].listens}</span>
+						{
+							(() => {
+								if(song.song[0].likes.includes(song.username)){
+									return (
+										<button className='songListenCount likeButtonLiked' id="likeButton" onClick={() => like()}>{song.song[0].likes.length}
+											<i style={{fontSize:"20px", verticalAlign: "top", float: "left"}} className="material-symbols-outlined">favorite</i>
+										</button>
+									)
+								}else{
+									return(
+										<button className='songListenCount likeButton' id="likeButton" onClick={() => like()}>{song.song[0].likes.length}
+											<i style={{fontSize:"20px", verticalAlign: "top", float: "left"}} className="material-symbols-outlined">favorite</i>
+										</button>
+									)
+								}
+							})()
+						}
+					</div>
                 </div>
             </div>
 			<div className="profileContainer">

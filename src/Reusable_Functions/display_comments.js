@@ -11,9 +11,20 @@ export default function DisplayComments(props){
                                 (() => {
                                     let date = new Date(comments[Object.keys(comments)[2]]);
 
-                                    return(
-                                        <p className="usernameComment">{Object.keys(comments)[0]} <span className="dateCommentStyle" title={date.toString()}>{date.toDateString() + " @ " + date.toLocaleTimeString()}</span></p>
-                                    )
+                                    if(props.song.username === props.song.song[0].username){
+                                        return(
+                                            <p className="usernameComment">{Object.keys(comments)[0]}
+                                                <span className="creator">Creator</span>
+                                                <span className="dateCommentStyle" title={date.toString()}>{date.toDateString() + " @ " + date.toLocaleTimeString()}</span>
+                                            </p>
+                                        )
+                                    }else{
+                                        return(
+                                            <p className="usernameComment">{Object.keys(comments)[0]}
+                                                <span className="dateCommentStyle" title={date.toString()}>{date.toDateString() + " @ " + date.toLocaleTimeString()}</span>
+                                            </p>
+                                        )
+                                    }
                                 })()
                             }
                             <p className="commentText" id={comments.id}>{comments[Object.keys(comments)[0]]}</p>

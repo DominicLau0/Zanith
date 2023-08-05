@@ -1,8 +1,10 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { NavLink, Outlet, useNavigate, useLoaderData } from "react-router-dom"
 import { useEffect } from 'react';
 import Cookies from 'universal-cookie'
 import axios from 'axios';
+
+const cookies = new Cookies();
 
 let currentSong = document.createElement('audio');
 
@@ -11,7 +13,8 @@ let interval;
 let lastVolume = 0.8;
 const cloud_name = "dw5heht2b";
 
-const cookies = new Cookies();
+let songTitleString;
+let songArtistString;
 
 function pauseSong(trackId){
 	currentSong.pause();
@@ -78,6 +81,9 @@ function calculateVolume(volume){
 }
 
 function logout(){
+    pauseSong(lastPlayedTrack);
+    currentSong.src = "";
+
     let xhttp = new XMLHttpRequest();
 
     xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/logout", false);
@@ -121,8 +127,8 @@ function playSong(trackId, pictureId){
         currentSong.load();
     }
 
-    cookies.set("song", trackId, {maxAge: 1000*60*60*24*30});
-	cookies.set("pictures", pictureId, {maxAge: 1000*60*60*24*30});
+    cookies.set("song", trackId, {path: '/', maxAge: 1000*60*60*24*30});
+	cookies.set("pictures", pictureId, {path: '/', maxAge: 1000*60*60*24*30});
 
     cancelAnimationFrame(interval);
     displaySongImage(pictureId);
@@ -144,42 +150,32 @@ function displaySongImage(pictureId){
 }
 
 export default function RootLayout(){
-	let songTitleString;
-	let songArtistString;
-	let beginningTimeString;
-
-	if(cookies.get("title") === undefined || cookies.get("artist") === undefined || cookies.get("timeStamp") === undefined || cookies.get("song") === undefined){
-		songTitleString = "Song Title";
-		songArtistString = "Artist";
-		beginningTimeString = "00:00";
-	}else{
-		songTitleString = cookies.get("title");
-		songArtistString = cookies.get("artist");
-		beginningTimeString = cookies.get("timeStamp");
-		//currentSong.src = `https://res.cloudinary.com/${cloud_name}/video/upload/${cookies.get("song")}`
-	}
-
-	if(cookies.get("timeStamp") === undefined){
-	}
-
-    const [songTitle, setSongTitle] = useState(songTitleString);
-    const [songArtist, setSongArtist] = useState(songArtistString);
-    const [beginningTime, setBeginningTime] = useState(beginningTimeString);
-    const [endTime, setEndTime] = useState("00:00");
+    if(currentSong.src === ""){
+        if(cookies.get("title") === undefined || cookies.get("artist") === undefined || cookies.get("song") === undefined){
+            songTitleString = "Song Title";
+            songArtistString = "Artist";
+        }else{
+            songTitleString = cookies.get("title");
+            songArtistString = cookies.get("artist");
+            currentSong.src = `https://res.cloudinary.com/${cloud_name}/video/upload/${cookies.get("song")}`;
+            currentSong.load();
+            lastPlayedTrack = cookies.get("song");
+        }
+    }
 
     /*Output the total duration of the song*/
     currentSong.onloadedmetadata = function(){
-        setEndTime(calculateTime(currentSong.duration));
+        document.getElementById("endTime").innerHTML = calculateTime(currentSong.duration);
         document.getElementById("songSlider").setAttribute('max', `${Math.floor(currentSong.duration * 1000)}`);
     };
 
     function switchFunction(trackId, pictureId, username, title){
         if(trackId !== lastPlayedTrack || currentSong.paused){
             if(trackId !== lastPlayedTrack){
-                setSongTitle(title);
-                setSongArtist(username);
-				cookies.set("title", title, {maxAge: 1000*60*60*24*30});
-				cookies.set("artist", username, {maxAge: 1000*60*60*24*30});
+                document.getElementById("songTitle").innerHTML = title;
+                document.getElementById("songArtist").innerHTML = username;
+				cookies.set("title", title, {path: '/', maxAge: 1000*60*60*24*30});
+				cookies.set("artist", username, {path: '/', maxAge: 1000*60*60*24*30});
             }
             playSong(trackId, pictureId);
             interval = requestAnimationFrame(updateTimeStamp);
@@ -189,6 +185,9 @@ export default function RootLayout(){
     }
 
     function footerSwitchFunction(){
+        if(currentSong.src === ""){
+            return;
+        }
         if(currentSong.paused){
             cancelAnimationFrame(interval);
             currentSong.play();
@@ -208,8 +207,7 @@ export default function RootLayout(){
         interval = requestAnimationFrame(updateTimeStamp);
         if(!isNaN(currentSong.duration)){
             document.getElementById("songSlider").value = (currentSong.currentTime / currentSong.duration) * (currentSong.duration * 1000);
-            setBeginningTime(calculateTime(currentSong.currentTime));
-			cookies.set("timeStamp", calculateTime(currentSong.currentTime), {maxAge: 1000*60*60*24*30});
+            document.getElementById("beginningTime").innerHTML = calculateTime(currentSong.currentTime);
         }
     }
 
@@ -217,7 +215,7 @@ export default function RootLayout(){
         let songSlider = document.getElementById("songSlider");
 
 		songSlider.addEventListener('input', () =>{
-			setBeginningTime(calculateTime(document.getElementById("songSlider").value/1000));
+			document.getElementById("beginningTime").innerHTML = calculateTime(document.getElementById("songSlider").value/1000);
 	
 			if(!currentSong.paused){
 				cancelAnimationFrame(interval);
@@ -311,12 +309,12 @@ export default function RootLayout(){
 						})()
 					}
                     <div className="titleAndArtist">
-                        <p className="musicPlayerTitle">{songTitle}</p>
-                        <p className="musicPlayerArtist">{songArtist}</p>
+                        <p className="musicPlayerTitle" id="songTitle">{songTitleString}</p>
+                        <p className="musicPlayerArtist" id="songArtist">{songArtistString}</p>
                         <div className="timeStamp">
-                            <p className="beginningTime">{beginningTime}</p>
+                            <p className="beginningTime" id="beginningTime">0:00</p>
                             <input id="songSlider" type="range" min="0" max="1000" defaultValue="0" />
-                            <p className="endTime">{endTime}</p>
+                            <p className="endTime" id="endTime">00:00</p>
                         </div>
                     </div>
                 </div>

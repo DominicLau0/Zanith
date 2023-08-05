@@ -662,5 +662,50 @@ hr{
 
 .songListenCount{
     vertical-align: super;
-    margin-top: 190px;
+    margin-top: 180px;
+    display: inline-block;
+    font-size: 18px;
+}
+
+.songPlayIcon{
+    margin-top: 180px;
+    margin-left: 15px;
+    display: "block";
+    font-size: 25px;
+}
+
+.creator{
+    font-size: 13px;
+    margin-left: 10px;
+    border-radius: 10px;
+    border: 2px solid darksalmon;
+    color: darksalmon;
+    padding: 2px;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.likeButton, .likeButtonLiked{
+    border: 3px solid;
+    margin-left: 15px;
+    border-radius: 10px;
+    padding: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 17px;
+    color: #444444;
+    border-color: #444444;
+    background-color: rgb(206, 206, 206);
+    cursor: pointer;
+}
+
+.likeButton:hover, .likeButtonLiked:hover{
+    transition-duration: 0.30s;
+    color: rgb(255, 130, 151);
+    border-color: rgb(255, 130, 151);
+}
+
+.likeButtonLiked{
+    color: rgb(255, 94, 120);
+    border-color: rgb(255, 94, 120);
 }
