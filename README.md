@@ -5,7 +5,7 @@ Zanith is a music streaming website where users can upload their songs to the we
 Website: https://zanith.me or https://zanith-server.onrender.com.
 
 ## New Users
-New users have to signup here: https://zanith.me/login.
+New users have to signup here: https://zanith.me/signup.
 
 ## Homepage
 ### Introduction
