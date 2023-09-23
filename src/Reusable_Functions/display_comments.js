@@ -34,7 +34,7 @@ export default function DisplayComments(props){
                                 if(props.song.username === Object.keys(comments)[0]){
                                     return(
                                         <div className="buttonCommentBar">
-                                            <i style={{fontSize:"20px"}} className='material-symbols-outlined iconStyles commentButtonModifier' onClick={() => props.deleteComment(comments.id)}>delete</i>
+                                            <i className='iconSize material-symbols-outlined iconStyles commentButtonModifier' onClick={() => props.deleteComment(comments.id)}>delete</i>
                                         </div>
                                     )
                                 }

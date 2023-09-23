@@ -211,9 +211,11 @@ textarea {
 .description{
     background-color: #585858;
     color: lightgrey;
-    width: 1850px;
+    width: auto;
     height: auto;
     font-family: Arial;
+    margin-bottom: 50px;
+    margin-right: 20px;
 }
 
 /*Submits the login/signup info to the client side*/
@@ -259,7 +261,7 @@ a{
     height: 200px;
     padding: 0px;
     margin: 0px;
-    width: 1900px;
+    width: 100%;
     display: flex;
 }
 
@@ -270,8 +272,10 @@ a{
 }
 
 /*Container for the profile which contains the songDisplay and the albumDisplay*/
-.profileContainer{
+.profileContainer, .descriptionContainer{
     display: flex;
+    margin: 0px;
+    padding: 0px;
 }
 
 /*Displays all the songs in one section and displays all the albums in the other section*/
@@ -708,4 +712,64 @@ hr{
 .likeButtonLiked{
     color: rgb(255, 94, 120);
     border-color: rgb(255, 94, 120);
+}
+
+.iconSize{
+    font-size: 20px;
+}
+
+.editSongButton{
+    float: right;
+    font-size: 15px;
+    margin-bottom: auto;
+    margin-top: 10px;
+}
+
+.editSongIcon{
+    font-size: 15px;
+    margin-right: 5px;
+}
+
+.descriptionHead{
+    width: 95%;
+}
+
+.descriptionContainer{
+    height: 50px;
+}
+
+.editOverLay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(46, 46, 46, 0.95);
+}
+
+.ReactModal__Overlay {
+    opacity: 0;
+    transition: opacity 250ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open{
+    opacity: 1;
+}
+
+.ReactModal__Overlay--before-close{
+    opacity: 0;
+}
+
+.backgroundOverlay{
+    background-color: #1f1f1f;
+    vertical-align: middle;
+    top: 25%;
+    left: 50%;
+    margin-top: -80px;
+    margin-left: -600px;
+    position: absolute;
+    padding: 30px;
+    border-radius: 20px;
+    font-size: 20px;
+    padding-top: 0px;
 }
