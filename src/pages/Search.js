@@ -31,9 +31,9 @@ export default function Search(){
                             return(
                                 <>
                                     <h3>Artists</h3>
-                                    <div className="searchArtistContainer" onClick={() => navigate(`/profile/${searchValue}`)}>
+                                    <div className="searchArtistContainer" onClick={() => navigate(`/profile/${songs.artist}`)}>
                                         <i style={{fontSize:"40px", marginLeft: "20px"}} className="material-symbols-outlined iconStyles">account_circle</i>
-                                        <p style={{marginLeft: "10px"}}>{searchValue}</p>
+                                        <p style={{marginLeft: "10px"}}>{songs.artist}</p>
                                     </div>
                                 </>
                             )
@@ -75,6 +75,7 @@ export const searchLoader = async ({ params }) => {
     const { searchValue } = params;
 
 	const res = await axios.get(`https://puzzled-worm-sweater.cyclic.app/search/${searchValue}`, {withCredentials: true});
+    console.log(res.data);
 
 	return res.data;
 }
