@@ -17,10 +17,10 @@ let songTitleString;
 let songArtistString;
 
 function pauseSong(trackId){
-	currentSong.pause();
+    currentSong.pause();
 
-	cancelAnimationFrame(interval);
-	
+    cancelAnimationFrame(interval);
+    
     /*
     Basically if you're on a page playing a song called "Tropical Beach" and you navigate to a different page
     and play a different song, it will pause this song to play the other song, but since this song might not appear on that page,
@@ -33,15 +33,15 @@ function pauseSong(trackId){
 }
 
 function like(trackId){
-	let likeAmount;
-	let newLike;
+    let likeAmount;
+    let newLike;
 
-	let xhttp = new XMLHttpRequest();
+    let xhttp = new XMLHttpRequest();
 
-	xhttp.onreadystatechange = function(){
-		if(this.readyState === 4 && this.status === 200){
-			likeAmount = JSON.parse(this.responseText).like;
-			newLike = JSON.parse(this.responseText).newLike;
+    xhttp.onreadystatechange = function(){
+        if(this.readyState === 4 && this.status === 200){
+            likeAmount = JSON.parse(this.responseText).like;
+            newLike = JSON.parse(this.responseText).newLike;
 
             document.getElementById(`likeAmount:${trackId}`).textContent = likeAmount;        
 
@@ -50,34 +50,34 @@ function like(trackId){
             }else{
                 document.getElementById(`likeIcon:${trackId}`).style.color = "";
             }
-		}
-	}
+        }
+    }
 
-	xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/like", false);
-	xhttp.withCredentials = true;
-	xhttp.setRequestHeader("Content-Type", "application/json");
-	xhttp.send(JSON.stringify({song: trackId}));
+    xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/like", false);
+    xhttp.withCredentials = true;
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.send(JSON.stringify({song: trackId}));
 }
 
 /*Converts the input to a time based on minutes:seconds*/
 function calculateTime(time){
-	let minutes = Math.floor(time / 60);
-	let seconds = Math.floor(time % 60);
+    let minutes = Math.floor(time / 60);
+    let seconds = Math.floor(time % 60);
 
-	if(seconds < 10){
-		seconds = "0" + seconds;
-	}
-	return minutes+":"+seconds;
+    if(seconds < 10){
+        seconds = "0" + seconds;
+    }
+    return minutes+":"+seconds;
 }
 
 function calculateVolume(volume){
-	if(volume === 0){
-		document.getElementById("volumeIcon").textContent = "volume_off";
-	}else if(volume < 0.50){
-		document.getElementById("volumeIcon").textContent = "volume_down";
-	}else{
-		document.getElementById("volumeIcon").textContent = "volume_up";
-	}
+    if(volume === 0){
+        document.getElementById("volumeIcon").textContent = "volume_off";
+    }else if(volume < 0.50){
+        document.getElementById("volumeIcon").textContent = "volume_down";
+    }else{
+        document.getElementById("volumeIcon").textContent = "volume_up";
+    }
 }
 
 function logout(){
@@ -128,7 +128,7 @@ function playSong(trackId, pictureId){
     }
 
     cookies.set("song", trackId, {path: '/', maxAge: 1000*60*60*24*30});
-	cookies.set("pictures", pictureId, {path: '/', maxAge: 1000*60*60*24*30});
+    cookies.set("pictures", pictureId, {path: '/', maxAge: 1000*60*60*24*30});
 
     cancelAnimationFrame(interval);
     displaySongImage(pictureId);
@@ -174,8 +174,8 @@ export default function RootLayout(){
             if(trackId !== lastPlayedTrack){
                 document.getElementById("songTitle").innerHTML = title;
                 document.getElementById("songArtist").innerHTML = username;
-				cookies.set("title", title, {path: '/', maxAge: 1000*60*60*24*30});
-				cookies.set("artist", username, {path: '/', maxAge: 1000*60*60*24*30});
+                cookies.set("title", title, {path: '/', maxAge: 1000*60*60*24*30});
+                cookies.set("artist", username, {path: '/', maxAge: 1000*60*60*24*30});
             }
             playSong(trackId, pictureId);
             interval = requestAnimationFrame(updateTimeStamp);
@@ -214,26 +214,26 @@ export default function RootLayout(){
     useEffect(() => {
         let songSlider = document.getElementById("songSlider");
 
-		songSlider.addEventListener('input', () =>{
-			document.getElementById("beginningTime").innerHTML = calculateTime(document.getElementById("songSlider").value/1000);
-	
-			if(!currentSong.paused){
-				cancelAnimationFrame(interval);
-			}
-		});
+        songSlider.addEventListener('input', () =>{
+            document.getElementById("beginningTime").innerHTML = calculateTime(document.getElementById("songSlider").value/1000);
+    
+            if(!currentSong.paused){
+                cancelAnimationFrame(interval);
+            }
+        });
 
-		/*After the user changes the song range, it'll update the time.*/
-		songSlider.addEventListener('change', () =>{
+        /*After the user changes the song range, it'll update the time.*/
+        songSlider.addEventListener('change', () =>{
             if(currentSong.src !== ""){
                 currentSong.currentTime = currentSong.duration * (document.getElementById("songSlider").value / (currentSong.duration * 1000));
             }
 
-			if(!currentSong.paused){
-				requestAnimationFrame(updateTimeStamp);
-			}
-		});
+            if(!currentSong.paused){
+                requestAnimationFrame(updateTimeStamp);
+            }
+        });
 
-		let volumeSlider = document.getElementById("volumeSlider");
+        let volumeSlider = document.getElementById("volumeSlider");
 
         /*Changes the volume of the song as well as the icon*/
         volumeSlider.addEventListener('input', () =>{
@@ -242,10 +242,10 @@ export default function RootLayout(){
             calculateVolume(currentSong.volume);
         });
 
-		currentSong.addEventListener('ended', function() {
-			pauseSong(lastPlayedTrack);
-			cancelAnimationFrame(interval);
-		});
+        currentSong.addEventListener('ended', function() {
+            pauseSong(lastPlayedTrack);
+            cancelAnimationFrame(interval);
+        });
     }, []);
 
     //For some reason putting this outside the function breaks the website.
@@ -291,23 +291,23 @@ export default function RootLayout(){
                     <i className="material-symbols-rounded iconStyles" style={{ fontSize:`20px` }} id="repeat" onClick={() => repeat()}>repeat</i>
                 </div>
                 <div className="musicDetails">
-					{
-						(() => {
-							if(cookies.get("pictures") === undefined){
-								return(
-									<div id="songCoverBackground">
-										<i className="material-symbols-rounded iconStyles" style={{fontSize:"25px"}}>headphones</i>
-									</div>
-								)
-							}else{
-								return(
-									<div id="songCover">
-										<img className="songImageCover" id="imageSource" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_65,h_65,c_fill,q_100/${cookies.get("pictures")}`}></img>
-									</div>
-								)
-							}
-						})()
-					}
+                    {
+                        (() => {
+                            if(cookies.get("pictures") === undefined){
+                                return(
+                                    <div id="songCoverBackground">
+                                        <i className="material-symbols-rounded iconStyles" style={{fontSize:"25px"}}>headphones</i>
+                                    </div>
+                                )
+                            }else{
+                                return(
+                                    <div id="songCover">
+                                        <img className="songImageCover" id="imageSource" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_65,h_65,c_fill,q_100/${cookies.get("pictures")}`}></img>
+                                    </div>
+                                )
+                            }
+                        })()
+                    }
                     <div className="titleAndArtist">
                         <p className="musicPlayerTitle" id="songTitle">{songTitleString}</p>
                         <p className="musicPlayerArtist" id="songArtist">{songArtistString}</p>
@@ -327,7 +327,7 @@ export default function RootLayout(){
 }
 
 export const rootLoader = async () => {
-	const res = await axios.get("https://puzzled-worm-sweater.cyclic.app/root", {withCredentials: true});
+    const res = await axios.get("https://puzzled-worm-sweater.cyclic.app/root", {withCredentials: true});
 
-	return res.data;
+    return res.data;
 }
