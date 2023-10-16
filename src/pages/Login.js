@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 
 export default function Login(){
     useEffect(() => {
-		document.title = "Login";
-	}, []);
+        document.title = "Login";
+    }, []);
 
     const navigate = useNavigate();
 

@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 export default function LabelName(){
     const { labelName } = useParams()
 
-	useEffect(() => {
-		document.title = labelName + ' on Zanith'
-	}, []);
+    useEffect(() => {
+        document.title = labelName + ' on Zanith'
+    }, []);
 
     return (
         <>  

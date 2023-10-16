@@ -65,14 +65,14 @@ function replaceImage(){
 export default function ArtistName(){
     const { artistName } = useParams()
 
-	useEffect(() => {
-		document.title = artistName + ' on Zanith';
+    useEffect(() => {
+        document.title = artistName + ' on Zanith';
 
         document.body.classList.add("profileSongBody");
-		return () => {
-			document.body.classList.remove("profileSongBody");
-		}
-	}, []);
+        return () => {
+            document.body.classList.remove("profileSongBody");
+        }
+    }, []);
 
     let { switchFunction, like, lastPlayedTrack, username }  = useOutletContext();
     const songs = useLoaderData();
@@ -97,7 +97,7 @@ export default function ArtistName(){
 export const artistLoader = async ({ params }) => {
     const { artistName } = params;
 
-	const res = await axios.get(`https://puzzled-worm-sweater.cyclic.app/profile/${artistName}`, {withCredentials: true});
+    const res = await axios.get(`https://puzzled-worm-sweater.cyclic.app/profile/${artistName}`, {withCredentials: true});
 
-	return res.data;
+    return res.data;
 }

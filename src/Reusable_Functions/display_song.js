@@ -13,22 +13,22 @@ function increaseListenCount(trackId, pictureId, username, title, props){
         lastPlayedTrack = trackId;
     }
 
-	let listenAmount;
+    let listenAmount;
 
-	let xhttp = new XMLHttpRequest();
+    let xhttp = new XMLHttpRequest();
 
-	xhttp.onreadystatechange = function(){
-		if(this.readyState === 4 && this.status ===200){
-			listenAmount = JSON.parse(this.responseText).listen;
+    xhttp.onreadystatechange = function(){
+        if(this.readyState === 4 && this.status ===200){
+            listenAmount = JSON.parse(this.responseText).listen;
 
-			document.getElementById(`listenAmount:${trackId}`).textContent = listenAmount;
-		}
-	}
+            document.getElementById(`listenAmount:${trackId}`).textContent = listenAmount;
+        }
+    }
 
-	xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/listen", false);
-	xhttp.setRequestHeader("Content-Type", "application/json");
-	xhttp.withCredentials = true;
-	xhttp.send(JSON.stringify({song: trackId}));
+    xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/listen", false);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.withCredentials = true;
+    xhttp.send(JSON.stringify({song: trackId}));
 }
 
 export default function DisplaySong(props){
@@ -85,14 +85,14 @@ export default function DisplaySong(props){
                         <div className="songStats">
                             <div className="icon">
                                 {
-									(() => {
-										if(song.likes.includes(props.username)){
-											return (<i style={{fontSize:"15px", color: "lightcoral"}} className="material-symbols-outlined iconStyles" onClick={() => props.like(`${song.song}`)} id={`likeIcon:${song.song}`}>favorite</i>);
-										}else{
-											return(<i style={{fontSize:"15px"}} className="material-symbols-outlined iconStyles" onClick={() => props.like(`${song.song}`)} id={`likeIcon:${song.song}`}>favorite</i>);
-										}
-									})()
-								}
+                                    (() => {
+                                        if(song.likes.includes(props.username)){
+                                            return (<i style={{fontSize:"15px", color: "lightcoral"}} className="material-symbols-outlined iconStyles" onClick={() => props.like(`${song.song}`)} id={`likeIcon:${song.song}`}>favorite</i>);
+                                        }else{
+                                            return(<i style={{fontSize:"15px"}} className="material-symbols-outlined iconStyles" onClick={() => props.like(`${song.song}`)} id={`likeIcon:${song.song}`}>favorite</i>);
+                                        }
+                                    })()
+                                }
                                 <p style={{fontSize:"14px"}} id={`likeAmount:${song.song}`}>{song.likes.length}</p>
                             </div>
                             <div className="icon">

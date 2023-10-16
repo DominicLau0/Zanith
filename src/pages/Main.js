@@ -5,13 +5,13 @@ import axios from 'axios';
 
 export default function Main(){
     useEffect(() => {
-		document.title = "Zanith";
+        document.title = "Zanith";
 
         document.body.classList.add("bodyColour");
-		return () => {
-			document.body.classList.remove("bodyColour");
-		}
-	}, []);
+        return () => {
+            document.body.classList.remove("bodyColour");
+        }
+    }, []);
 
     return (
         <>

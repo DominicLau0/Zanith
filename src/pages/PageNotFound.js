@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 
 export default function Song(){
     useEffect(() => {
-		document.title = "404 Not Found";
-	}, []);
+        document.title = "404 Not Found";
+    }, []);
 
     return (
         <>

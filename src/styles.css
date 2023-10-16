@@ -26,14 +26,14 @@ header{
 }
 
 footer{
-	background-color: #464646;
-	position: fixed;
+    background-color: #464646;
+    position: fixed;
     bottom: 0;
-	width: 100%;
-	height: 80px;
-	font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 48;
+    width: 100%;
+    height: 80px;
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 48;
     display: flex;
-	justify-content: center;
+    justify-content: center;
     align-items: center;
 }
 
@@ -156,11 +156,11 @@ footer{
 
 /*Signup and Login Buttons to redirect the user to the signup and login page*/
 .signupLoginButton, .signupLoginButton:Hover{
-	border: 2px solid white;
-	border-radius: 10px;
-	padding: 5px;
-	padding-left: 10px;
-	padding-right: 10px;
+    border: 2px solid white;
+    border-radius: 10px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
     margin-right: 20px;
     background: none;
     color: white;
@@ -292,10 +292,10 @@ a{
 
 /*Style horizontal ruler/line*/
 hr{
-	height:1px;
-	border-width:0;
-	color:gray;
-	background-color:gray;
+    height:1px;
+    border-width:0;
+    color:gray;
+    background-color:gray;
     margin-bottom: 20px;
 }
 
@@ -315,32 +315,32 @@ hr{
     width: 400px;
     margin-right: 20px;
     margin-bottom: 20px;
-	height: 70px;
+    height: 70px;
 }
 
 /*Contains the song image and play/pause icon*/
 .imageContainer{
-	position: relative;
+    position: relative;
 }
 
 /*Displays the song image*/
 .songImage{
-	border-radius: 10px 0px 0px 10px;
+    border-radius: 10px 0px 0px 10px;
 }
 
 /*Hides the play/pause icon by default*/
 .individualSongContainer .playPauseIcon{
-	visibility: hidden;
-	position: absolute;
-	top: 12px;
-	left: 12px;
+    visibility: hidden;
+    position: absolute;
+    top: 12px;
+    left: 12px;
     float: right;
 }
 
 /*When the song box is hovered, the song image becomes a bit transparent*/
 .individualSongContainer:hover .songImage{
     transition-duration: 0.25s;
-	opacity: 0.60;
+    opacity: 0.60;
 }
 
 /*When the song box is hovered, the play/pause icon becomes visible*/
@@ -351,7 +351,7 @@ hr{
 /*Style the title of the song*/
 .songTitle, .songArtist{
     margin: 10px;
-	margin-bottom: 0px;
+    margin-bottom: 0px;
     font-size: 14px;
     text-overflow: ellipsis;
     white-space: nowrap; 
@@ -378,33 +378,33 @@ hr{
     margin-left: 3px;
     padding: 0px;
     height: 20px;
-	margin-right: 3px;
-	user-select: none;
+    margin-right: 3px;
+    user-select: none;
     font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 48;
     color: #C0C0C0;
 }
 
 /*Displays the genre tags beside the song title*/
 .genreSection{
-	width: 100%;
-	height: 70px;
-	float: right;
+    width: 100%;
+    height: 70px;
+    float: right;
 }
 
 /*Generate custom genre tags*/
 .genreClassical, .genreRock, .genreElectronic, .genreHipHop, .genreRap, .genreOther, .genreElectronicDark, .genreDark{
-	padding-top: 2px;
-	padding-bottom: 2px;
-	padding-left: 6px;
-	padding-right: 6px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 6px;
+    padding-right: 6px;
 
-	margin-top: 8px;
+    margin-top: 8px;
 
     font-size: 11px;
-	border-radius: 10px;
+    border-radius: 10px;
     background: none;
     text-decoration: none;
-	float: left;
+    float: left;
 
     text-overflow: ellipsis;
     white-space: nowrap; 
@@ -413,33 +413,33 @@ hr{
 }
 
 .genreClassical{
-	border: 2px solid orange;
-	color: orange;
+    border: 2px solid orange;
+    color: orange;
 }
 
 .genreRock{
-	border: 2px solid red;
-	color: red;
+    border: 2px solid red;
+    color: red;
 }
 
 .genreElectronic{
-	border: 2px solid lightblue;
-	color: lightblue;
+    border: 2px solid lightblue;
+    color: lightblue;
 }
 
 .genreHipHop{
-	border: 2px solid lightseagreen;
-	color: lightseagreen;
+    border: 2px solid lightseagreen;
+    color: lightseagreen;
 }
 
 .genreRap{
-	border: 2px solid lightpink;
-	color: lightpink;
+    border: 2px solid lightpink;
+    color: lightpink;
 }
 
 .genreOther{
-	border: 2px solid lightseagreen;
-	color: lightseagreen;
+    border: 2px solid lightseagreen;
+    color: lightseagreen;
 }
 
 .genreDark{
@@ -458,32 +458,32 @@ hr{
 
 /*Contains the likes and comments icon and stats*/
 .songStats{
-	display: flex;
+    display: flex;
     align-items: center;
-	float: right;
-	margin-top: 35px;
-	margin-right: 7px;
+    float: right;
+    margin-top: 35px;
+    margin-right: 7px;
 }
 
 /*Styles the icons*/
 .iconStyles{
-	color: #C0C0C0;
-	cursor: pointer;
+    color: #C0C0C0;
+    cursor: pointer;
     user-select: none;
 }
 
 .iconStyles:hover{
-	color: #9e9e9e;
+    color: #9e9e9e;
     transition-duration: 0.25s;
 }
 
 .controls{
-	display: flex;
-	align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .controlsIcon{
-	margin-right: 5px;
+    margin-right: 5px;
 }
 
 .musicDetails{
@@ -491,66 +491,66 @@ hr{
 }
 
 #songCover, #songCoverBackground{
-	margin-left: 110px;
+    margin-left: 110px;
 }
 
 #songCoverBackground{
     background-color: rgb(46, 50, 54);
     border-radius: 5px 0px 0px 5px;
-	padding: 20px;
+    padding: 20px;
 
 }
 
 /*Changes the border radius of the image cover in the footer.*/
 .songImageCover{
-	border-radius: 5px 0px 0px 5px;
+    border-radius: 5px 0px 0px 5px;
 }
 
 .titleAndArtist{
     background-color: rgb(116, 116, 116);
     border-radius: 0px 5px 5px 0px;
-	width: 600px;
+    width: 600px;
 }
 
 .musicPlayerTitle, .musicPlayerArtist{
-	margin: 0px;
-	margin-left: 15px;
-	margin-top: 5px;
-	font-size: 15px;
+    margin: 0px;
+    margin-left: 15px;
+    margin-top: 5px;
+    font-size: 15px;
 }
 
 .musicPlayerArtist{
-	margin-top: 0px;
-	font-size: 13px;
-	color: rgb(206, 206, 206)
+    margin-top: 0px;
+    font-size: 13px;
+    color: rgb(206, 206, 206)
 }
 
 .timeStamp{
-	display: flex;
+    display: flex;
 }
 
 .beginningTime, .endTime{
-	margin-left: 15px;
-	font-size: 10px;
+    margin-left: 15px;
+    font-size: 10px;
 }
 
 #songSlider, #volumeSlider{
-	width: 80%;
-	margin-top: 3px;
-	margin-left: 15px;
-	accent-color: lightblue;
-	background-color: lightblue;
-	border: 0px;
+    width: 80%;
+    margin-top: 3px;
+    margin-left: 15px;
+    accent-color: lightblue;
+    background-color: lightblue;
+    border: 0px;
 }
 
 #volumeSlider{
-	margin-top: 2px;
-	margin-left: 5px;
-	width: 100%;
+    margin-top: 2px;
+    margin-left: 5px;
+    width: 100%;
 }
 
 .volumeControls{
-	display: flex;
+    display: flex;
     margin-left: 50px;
 }
 
