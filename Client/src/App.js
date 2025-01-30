@@ -15,15 +15,13 @@ import PageNotFound from './pages/PageNotFound'
 
 import RootLayout, {rootLoader} from './layouts/RootLayout'
 
+import { Provider } from './components/ui/provider';
+
 const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/">
-            <Route index element={<Main/>} loader={mainLoader}/>
-            <Route path="login" element={<Login/>} />
-            <Route path="signup" element={<SignUp/>} />
-
             <Route element={<RootLayout/>} loader={rootLoader}>
-                <Route path="home" element={<Home/>} loader={homeLoader}/>
+                <Route index element={<Home/>} loader={homeLoader}/>
                 <Route path="upload" element={<Upload/>}/>
                 <Route path="profile/:artistName" element={<Profile/>} loader={artistLoader} />
                 <Route path="recordlabel/:labelName" element={<RecordLabel/>} />
@@ -37,7 +35,9 @@ const router = createBrowserRouter(
 
 function App() {
     return (
-        <RouterProvider router={router}/>
+        <Provider>
+            <RouterProvider router={router}/>
+        </Provider>
     );
 }
 

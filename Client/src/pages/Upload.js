@@ -40,7 +40,7 @@ async function submitSongs(submit){
         document.getElementById("uploadSong").disabled = true;
 
         //Get signature from the server.
-        const signatureResponse = await axios.get("https://puzzled-worm-sweater.cyclic.app/signature", {withCredentials: true});
+        const signatureResponse = await axios.get("http://localhost:5000/signature", {withCredentials: true});
 
         //Upload the song
         //Append the data together to submit to cloudinary along with the song.
@@ -92,7 +92,7 @@ async function submitSongs(submit){
             image_version: image_cloudinaryResponse.data.version,
             image_signature: image_cloudinaryResponse.data.signature
         }
-        await axios.post("https://puzzled-worm-sweater.cyclic.app/upload", songData, {withCredentials: true})
+        await axios.post("http://localhost:5000/upload", songData, {withCredentials: true})
         
         /*Unlock text and other elements, as well as emptying the fields*/
 

@@ -67,11 +67,6 @@ export default function ArtistName(){
 
     useEffect(() => {
         document.title = artistName + ' on Zanith';
-
-        document.body.classList.add("profileSongBody");
-        return () => {
-            document.body.classList.remove("profileSongBody");
-        }
     }, []);
 
     let { switchFunction, like, lastPlayedTrack, username }  = useOutletContext();
@@ -84,6 +79,11 @@ export default function ArtistName(){
                 {/*<input className="songUpload" type="file" id="bannerImage" name="bannerImage" onChange={profileBannerImage} accept="image/*" />*/}
             </div>
             <div className="profileContainer">
+               <div>
+                    <h4>Followers</h4>
+                    <h3>Following</h3>
+                    <h3>Tracks</h3>
+                </div>
                 <div className="songDisplay">
                     <h3>Songs</h3>
                     <hr />
@@ -97,7 +97,7 @@ export default function ArtistName(){
 export const artistLoader = async ({ params }) => {
     const { artistName } = params;
 
-    const res = await axios.get(`https://puzzled-worm-sweater.cyclic.app/profile/${artistName}`, {withCredentials: true});
+    const res = await axios.get(`http://localhost:5000/profile/${artistName}`, {withCredentials: true});
 
     return res.data;
 }

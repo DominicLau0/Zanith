@@ -44,7 +44,7 @@ async function submitSongs(submit){
         document.getElementById("uploadSong").disabled = true;
 
         //Get signature from the server.
-        const signatureResponse = await axios.get("https://puzzled-worm-sweater.cyclic.app/signature", {withCredentials: true});
+        const signatureResponse = await axios.get("http://localhost:5000/signature", {withCredentials: true});
 
         //Upload the song
         //Append the data together to submit to cloudinary along with the song.
@@ -96,7 +96,7 @@ async function submitSongs(submit){
             image_version: image_cloudinaryResponse.data.version,
             image_signature: image_cloudinaryResponse.data.signature
         }
-        await axios.post("https://puzzled-worm-sweater.cyclic.app/upload", songData, {withCredentials: true})
+        await axios.post("http://localhost:5000/upload", songData, {withCredentials: true})
         
         /*Unlock text and other elements, as well as emptying the fields*/
 
@@ -207,7 +207,7 @@ export default function Song(){
             }
         }
     
-        xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/like", false);
+        xhttp.open("POST", "http://localhost:5000/like", false);
         xhttp.withCredentials = true;
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(JSON.stringify({song: song.song[0].song}));
@@ -235,7 +235,7 @@ export default function Song(){
             }
         }
     
-        xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/comment", false);
+        xhttp.open("POST", "http://localhost:5000/comment", false);
         xhttp.withCredentials = true;
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(JSON.stringify({comment: comments, song: song.song[0].song, uuid: uuid, date: date}));
@@ -252,7 +252,7 @@ export default function Song(){
             }
         }
     
-        xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/deleteComment", false);
+        xhttp.open("POST", "http://localhost:5000/deleteComment", false);
         xhttp.withCredentials = true;
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(JSON.stringify({commentId: commentId, song: song.song[0].song}));
@@ -432,7 +432,7 @@ export default function Song(){
 export const songLoader = async ({ params }) => {
     const { songName } = params;
 
-    const res = await axios.get(`https://puzzled-worm-sweater.cyclic.app/song/${songName}`, {withCredentials: true});
+    const res = await axios.get(`http://localhost:5000/song/${songName}`, {withCredentials: true});
 
     return res.data;
 }

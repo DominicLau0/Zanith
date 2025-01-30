@@ -1,5 +1,5 @@
 body{
-    background-color: #383838;
+    background-color: #1f1f1f;
     color: white;
     font-family: Arial;
     margin: 0;
@@ -35,6 +35,28 @@ footer{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.menuBar{
+    background-color: #272727;
+    width: 400px;
+    align-items: center;
+}
+
+.menuItem{
+    background-color: #383838;
+    margin: 20px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    vertical-align: auto;
+}
+
+@media screen and (max-width: 1200px){
+    footer{
+        display: none;
+        visibility: hidden;
+    }
 }
 
 /*Links on the header*/
@@ -272,7 +294,7 @@ a{
 }
 
 /*Container for the profile which contains the songDisplay and the albumDisplay*/
-.profileContainer, .descriptionContainer{
+.profileContainer, .descriptionContainer, .pageContainer{
     display: flex;
     margin: 0px;
     padding: 0px;
@@ -534,7 +556,7 @@ hr{
     font-size: 10px;
 }
 
-#songSlider, #volumeSlider{
+.songSlider, #volumeSlider{
     width: 80%;
     margin-top: 3px;
     margin-left: 15px;
@@ -556,6 +578,10 @@ hr{
 
 .searchBody{
     background-color: #2e2e2e;
+}
+
+.newSearchBody{
+    background-color: #1f1f1f;
 }
 
 .profileSongBody{

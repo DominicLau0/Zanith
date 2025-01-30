@@ -6,19 +6,14 @@ import axios from 'axios';
 export default function Search(){
     const { searchValue } = useParams()
 
-    useEffect(() => {
-        document.body.classList.add("searchBody");
-        return () => {
-            document.body.classList.remove("searchBody");
-        }
-    }, []);
-
     document.title = searchValue + ' results on Zanith';
 
     let { switchFunction, like, lastPlayedTrack }  = useOutletContext();
     const songs = useLoaderData();
 
     const navigate = useNavigate();
+
+    
 
     return (
         <>  
@@ -74,7 +69,7 @@ export default function Search(){
 export const searchLoader = async ({ params }) => {
     const { searchValue } = params;
 
-    const res = await axios.get(`https://puzzled-worm-sweater.cyclic.app/search/${searchValue}`, {withCredentials: true});
+    const res = await axios.get(`http://localhost:5000/search/${searchValue}`, {withCredentials: true});
     console.log(res.data);
 
     return res.data;

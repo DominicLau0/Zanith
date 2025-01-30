@@ -25,7 +25,7 @@ function increaseListenCount(trackId, pictureId, username, title, props){
         }
     }
 
-    xhttp.open("POST", "https://puzzled-worm-sweater.cyclic.app/listen", false);
+    xhttp.open("POST", "http://localhost:5000/listen", false);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.withCredentials = true;
     xhttp.send(JSON.stringify({song: trackId}));
