@@ -5,6 +5,8 @@ import axios from 'axios';
 import DisplayComments from "../Reusable_Functions/display_comments.jsx";
 import ReactModal from 'react-modal';
 
+import { Badge } from "@/components/ui/badge"
+
 const api_key = "938647316156691";
 const cloud_name = "dw5heht2b";
 
@@ -307,7 +309,7 @@ export default function Song(){
                             }else if(song.song[0].genre === "Rock"){
                                 return(<span className="genreDark genreRock">{song.song[0].genre}</span>)
                             }else if(song.song[0].genre === "Electronic"){
-                                return(<span className="genreDark genreElectronicDark">{song.song[0].genre}</span>)
+                                return(<Badge variant="secondary">test</Badge>)
                             }else if(song.song[0].genre === "Hip Hop"){
                                 return(<span className="genreDark genreHipHop">{song.song[0].genre}</span>)
                             }else if(song.song[0].genre === "Rap"){

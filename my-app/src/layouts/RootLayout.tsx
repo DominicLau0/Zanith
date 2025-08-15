@@ -9,12 +9,16 @@ import axios from 'axios';
 import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
 
-import { Box, Input, Grid, GridItem, Text, Spacer, Heading, Stack, HStack, VStack, Center, Button, Kbd, Flex} from '@chakra-ui/react'
+import { Box, Grid, GridItem, Text, Spacer, Heading, Stack, HStack, VStack, Center, Button, Kbd, Flex} from '@chakra-ui/react'
 import { BreadcrumbCurrentLink, BreadcrumbLink, BreadcrumbRoot} from "../components/ui/breadcrumb"
 import { InputGroup } from "../components/ui/input-group"
 import { Field } from "../components/ui/field"
 import { Avatar, AvatarGroup } from "../components/ui/avatar"
 import { LuSearch } from "react-icons/lu"
+import { MdSkipPrevious, MdSkipNext, MdOutlineRepeat, MdVolumeUp, MdVolumeOff } from "react-icons/md";
+
+import { Slider } from "@/components/ui/slider"
+import { Input } from "@/components/ui/input"
 
 const cookies = new Cookies();
 
@@ -71,34 +75,11 @@ function calculateTime(time){
 
 function calculateVolume(volume){
     if(volume === 0){
-        document.getElementById("volumeIcon").textContent = "volume_off";
+        return <MdVolumeOff/>
     }else if(volume < 0.50){
-        document.getElementById("volumeIcon").textContent = "volume_down";
+        return <MdVolumeDown/>
     }else{
-        document.getElementById("volumeIcon").textContent = "volume_up";
-    }
-}
-
-function repeat(){
-    if(currentSong.loop === true){
-        document.getElementById("repeat").style.color = "";
-        currentSong.loop = false;
-    }else{
-        document.getElementById("repeat").style.color = "lightblue";
-        currentSong.loop = true;
-    }
-}
-
-function mute(){
-    if(currentSong.volume !== 0){
-        document.getElementById("volumeIcon").textContent = "volume_off";
-        document.getElementById("volumeSlider").value = 0;
-        lastVolume = currentSong.volume;
-        currentSong.volume = 0;
-    }else{
-        currentSong.volume = lastVolume;
-        calculateVolume(currentSong.volume);
-        document.getElementById("volumeSlider").value = lastVolume * 100;
+        return <MdVolumeUp/>
     }
 }
 
@@ -125,6 +106,8 @@ export default function RootLayout(){
     const [isShuffle, setIsShuffle] = useState(false);
     const [isRepeat, setIsRepeat] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
+
+    const [volume, setVolume] = useState(20)
 
     const [time, setTime] = useState(0);
     const [endTime, setEndTime] = useState(0);
@@ -181,6 +164,23 @@ export default function RootLayout(){
             document.getElementById(trackId).innerHTML = "play_circle";
         }
         setPlayPause("play_arrow");        
+    }
+
+    function repeat(){
+        setIsRepeat(prev => !prev)
+        currentSong.loop = !currentSong.loop
+    }
+
+    function mute(){
+        if(currentSong.volume !== 0){
+            setVolume(0)
+            lastVolume = currentSong.volume;
+            currentSong.volume = 0;
+        }else{
+            currentSong.volume = lastVolume;
+            calculateVolume(currentSong.volume);
+            document.getElementById("volumeSlider").value = lastVolume * 100;
+        }
     }
 
     function logout(){
@@ -301,6 +301,8 @@ export default function RootLayout(){
     console.log("test");
 
     useEffect(() => {
+        const audio = new Audio(currentTrack);
+
         let volumeSlider = document.getElementById("volumeSlider");
 
         if(currentSong.src === ""){
@@ -335,8 +337,12 @@ export default function RootLayout(){
         });
     }, []);
 
+    useEffect(() => {
+
+    }, []);
+
     return(
-        <>         
+        <>
             <main>
                 <Grid
                     color='white'
@@ -355,12 +361,7 @@ export default function RootLayout(){
                             <Spacer/>
                             <InputGroup flex="1" startElement={<LuSearch/>} endElement={<Kbd>Enter</Kbd>}>
                                 <Input
-                                    bg='#322C23'
-                                    border="0px"
-                                    color="#D9D9D9"
-                                    focusRingColor='teal.600'
-                                    placeholder='Search'
-                                    _placeholder={{ color: "inherit" }}
+                                    placeholder="Search"
                                     onChange={e => setSearch(e.target.value)}
                                     onKeyDown={e => {if(e.key === "Enter") searchSong()}}
                                 />
@@ -386,12 +387,13 @@ export default function RootLayout(){
 
             <footer>
                 <div id="audioDiv"></div>
-                <audio src={currentTrack} ref={audioRef}/>
                 <div className="controls">
-                    <i className="material-symbols-rounded iconStyles controlsIcon" style={{fontSize: "25px"}}>skip_previous</i>
+                    <MdSkipPrevious/>
                     <i className="material-symbols-rounded iconStyles controlsIcon" style={{fontSize: "35px"}} id="play_arrow" onClick={() => footerSwitchFunction()}>{play_pause}</i>
-                    <i className="material-symbols-rounded iconStyles" style={{fontSize: "25px", marginRight: "15px"}}>skip_next</i>
-                    <i className="material-symbols-rounded iconStyles" style={{ fontSize:`20px` }} id="repeat" onClick={() => repeat()}>repeat</i>
+                    <MdSkipNext/>
+                    <button onClick={repeat}>
+                        <MdOutlineRepeat style={{color: isRepeat ? "lightblue" : ""}}/>
+                    </button>
                 </div>
                 <div className="musicDetails">
                     {
@@ -416,14 +418,32 @@ export default function RootLayout(){
                         <p className="musicPlayerArtist">{songArtist}</p>
                         <div className="timeStamp">
                             <p className="beginningTime">{beginningTime}</p>
-                            <input className="songSlider" value={songSlider} type="range" min="0" ref ={songSliderRef} max={songSliderMax} defaultValue="0" onChange={handleSongSliderChange} onInput={handleSongSliderInput}/>
+                            <Slider
+                                className="w-full max-w-xl"
+                                value={[songSlider]}
+                                min={[0]}
+                                max={[songSliderMax]}
+                                defaultValue={[0]}
+                                onValueCommit={handleSongSliderChange}
+                            />
                             <p className="endTime">{endTime}</p>
                         </div>
                     </div>
                 </div>
                 <div className="volumeControls">
-                    <i className="material-symbols-rounded iconStyles" style={{fontSize: "25px"}} id="volumeIcon" onClick={() => mute()}>volume_up</i>
-                <input id="volumeSlider" type="range" min="0" max="100" defaultValue="80" /></div>
+                    <button onClick={() => mute()}>
+                        {calculateVolume(volume)}
+                    </button>
+                <Slider
+                    className="w-full max-w-xl"
+                    defaultValue={[30]}
+                    value={[volume]}
+                    onValueChange={(e) => setVolume(e)}
+                    max={100}
+                    step={1}
+                />
+                <input id="volumeSlider" type="range" min="0" max="100" defaultValue="80" />
+                </div>
             </footer>
         </>
     )

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, useLoaderData, useOutletContext } from 'react-router-dom';
-import DisplaySong from "../Reusable_Functions/display_song.jsx";
+import DisplaySong from "../Reusable_Functions/display_song.js";
 import axios from 'axios';
 import Cropper from 'cropperjs';
 

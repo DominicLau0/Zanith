@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import RecordLabelImage from "../images/record-label.jpg"
 import { NavLink, useNavigate, useLoaderData, useOutletContext } from "react-router-dom"
 import axios from "axios"
-import DisplaySong from "../Reusable_Functions/display_song.jsx"
+import DisplaySong from "../Reusable_Functions/display_song.js"
 import HomeIcon from "../icons/home.png"
 import { Stack, Box, Flex, Heading, Grid, SimpleGrid, GridItem, Text } from '@chakra-ui/react'
 

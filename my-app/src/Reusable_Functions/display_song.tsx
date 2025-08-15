@@ -1,8 +1,20 @@
+// @ts-nocheck
+
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import { MdInsertComment, MdFavorite, MdFavoriteBorder, MdOutlinePlayCircle, MdOutlinePauseCircle } from "react-icons/md";
+import { Badge } from "@/components/ui/badge"
 
 const cloud_name = "dw5heht2b";
 let lastPlayedTrack;
+
+const genreClassMap = {
+  Classical: "genreClassical",
+  Rock:      "genreRock",
+  Electronic:"genreElectronic",
+  "Hip Hop": "genreHipHop",
+  Rap:       "genreRap",
+};
 
 function increaseListenCount(trackId, pictureId, username, title, props){
     if(trackId === lastPlayedTrack){
@@ -40,19 +52,17 @@ export default function DisplaySong(props){
                 <div className="individualSongContainer" key={song.song}>
                     <div className="imageContainer">
                         <img className="songImage" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_70,h_70,c_fill,q_100/${song.picture}`} alt={`${song.title}`} />
-                        {
-                            (() => {
-                                if(props.lastPlayedTrack === song.song){
-                                    return(
-                                        <i className="material-symbols-outlined iconStyles playPauseIcon" style={{fontSize:"45px"}} id={`${song.song}`} onClick={() => increaseListenCount(song.song, song.picture, song.username, song.title, props)}>pause_circle</i>
-                                    )
-                                }else{
-                                    return(
-                                        <i className="material-symbols-outlined iconStyles playPauseIcon" style={{fontSize:"45px"}} id={`${song.song}`} onClick={() => increaseListenCount(song.song, song.picture, song.username, song.title, props)}>play_circle</i>
-                                    )
-                                }
-                            })()
-                        }
+                        {props.lastPlayedTrack === song.song ? (
+                            <MdOutlinePauseCircle
+                                id={`${song.song}`}
+                                onClick={() => increaseListenCount(song.song, song.picture, song.username, song.title, props)}
+                            />
+                        ) : (
+                            <MdOutlinePlayCircle
+                                id={`${song.song}`}
+                                onClick={() => increaseListenCount(song.song, song.picture, song.username, song.title, props)}
+                            />
+                        )}
                     </div>
                     <div className="songTitleandListens">
                         <div>
@@ -72,6 +82,7 @@ export default function DisplaySong(props){
                                 }else if(song.genre === "Rock"){
                                     return(<p className="genreRock">{song.genre}</p>)
                                 }else if(song.genre === "Electronic"){
+                                    return(<Badge variant="secondary">{song.genre}</Badge>)
                                     return(<p className="genreElectronic">{song.genre}</p>)
                                 }else if(song.genre === "Hip Hop"){
                                     return(<p className="genreHipHop">{song.genre}</p>)
@@ -84,20 +95,24 @@ export default function DisplaySong(props){
                         }
                         <div className="songStats">
                             <div className="icon">
-                                {
-                                    (() => {
-                                        if(song.likes.includes(props.username)){
-                                            return (<i style={{fontSize:"15px", color: "lightcoral"}} className="material-symbols-outlined iconStyles" onClick={() => props.like(`${song.song}`)} id={`likeIcon:${song.song}`}>favorite</i>);
-                                        }else{
-                                            return(<i style={{fontSize:"15px"}} className="material-symbols-outlined iconStyles" onClick={() => props.like(`${song.song}`)} id={`likeIcon:${song.song}`}>favorite</i>);
-                                        }
-                                    })()
-                                }
+                                {song.likes.includes(props.username) ? (
+                                    <MdFavorite
+                                        className="lightcoral"
+                                        onClick={() => props.like(`${song.song}`)}
+                                        id={`likeIcon:${song.song}`}
+                                    />
+                                ):(
+                                    <MdFavoriteBorder
+                                        onClick={() => props.like(`${song.song}`)}
+                                        id={`likeIcon:${song.song}`}
+                                    />
+                                )}
                                 <p style={{fontSize:"14px"}} id={`likeAmount:${song.song}`}>{song.likes.length}</p>
                             </div>
                             <div className="icon">
-                                <i className="material-symbols-outlined iconStyles" style={{fontSize:"15px"}} onClick={() => navigate("/song/" + song.song +"/#commentHeader")}>comment</i>
+                                <MdInsertComment onClick={() => navigate("/song/" + song.song +"/#commentHeader")}/>
                                 <p style={{fontSize:"14px"}}>{song.comments.length}</p>
+                                <Badge variant="secondary">test</Badge>
                             </div>
                         </div>
                     </div>
