@@ -2,12 +2,24 @@ import { useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import { useEffect } from 'react';
 
-import { Input, Button, Stack} from '@chakra-ui/react'
-import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger} from "../components/ui/dialog"
-import { Field } from "../components/ui/field"
-import { PasswordInput } from "../components/ui/password-input"
+import { Input } from "@/components/ui/input"
 
-export default function Login(props){
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
+export default function Login(){
+    console.log("test")
     const navigate = useNavigate();
 
     const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +30,9 @@ export default function Login(props){
     const [invalidUsername, setInvalidUsername] = useState("");
     const [invalidPassword, setInvalidPassword] = useState("");
 
-    async function loginFunction(){
+    async function loginFunction(e){
+        e.preventDefault()
+
         //Clear the system message.
         setInvalidUsername("");
         setInvalidPassword("");
@@ -32,9 +46,7 @@ export default function Login(props){
         }
 
         //Sends the user data to the server.
-        if(username !== "" && password !== ""){
-            let userInfo = {"username": username, "password": password};
-    
+        if(username !== "" && password !== ""){   
             let xhttp = new XMLHttpRequest();
     
             xhttp.onreadystatechange = function(){
@@ -46,53 +58,61 @@ export default function Login(props){
 
                 }else if(this.readyState === 4 && this.status === 201){
                     setIsOpen(false);
-                    props.setUsername(username)
+                    setUsername(username)
                 }
             }
 
             xhttp.open("POST", "http://localhost:5000/login", false);
             xhttp.withCredentials = true;
             xhttp.setRequestHeader("Content-Type", "application/json");
-            xhttp.send(JSON.stringify(userInfo));
+            xhttp.send(JSON.stringify({"username": username, "password": password}));
+
+            const response = await fetch("http://localhost:5000/login", {
+                method: "POST",
+                body: JSON.stringify({"username": username, "password": password})
+            })
         }
     }
 
     return (
-        <DialogRoot placement="top" motionPreset="slide-in-bottom" open={isOpen} onInteractOutside={() => setIsOpen(false)}>
+        <Dialog>
             <DialogTrigger asChild>
-                <Button size="lg" colorPalette="teal" variant="solid" onClick={() => setIsOpen(true)}>Log in</Button>
+                <Button>Login</Button>
             </DialogTrigger>
-
-            <DialogContent style={{backgroundColor: '#41392e'}}>
-                <DialogHeader>
-                    <DialogTitle>Log in</DialogTitle>
-                </DialogHeader>
-
-                <DialogBody>
-                    <Stack gap="4">
-                        <Field invalid={invalidUsername === '' ? false : true}
-                                label="Username"
-                                errorText={invalidUsername}
-                                required>
-                            <Input value={username} onChange={e => setUsername(e.target.value)} onKeyDown={e => {if(e.key === "Enter") loginFunction()}} placeholder="Username" />
-                        </Field>
-                        <Field invalid={invalidPassword ==='' ? false : true}
-                                label="Password"
-                                errorText={invalidPassword}
-                                required>
-                            <PasswordInput value={password} onChange={e => setPassword(e.target.value)} onKeyDown={e => {if(e.key === "Enter") loginFunction()}} placeholder="Password" />
-                        </Field>
-                    </Stack>
-                </DialogBody>
-
-                <DialogFooter>
-                    <DialogActionTrigger asChild>
-                        <Button variant="ouline" onClick={() => setIsOpen(false)}>Cancel</Button>
-                    </DialogActionTrigger>
-                    <Button background="teal" color="white" onClick={loginFunction}>Log in</Button>
-                </DialogFooter>
+            <DialogContent>
+                <form onSubmit={loginFunction}>
+                    <DialogHeader>
+                        <DialogTitle>Login</DialogTitle>
+                        <DialogDescription>
+                            Login to an existing account now.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4">
+                        <div className="grid gap-3">
+                            <Label htmlFor="name-1">Username</Label>
+                            <Input id="name-1" name="username" onChange={e => setUsername(e.target.value)}/>
+                        </div>
+                        <div className="grid gap-3">
+                            <div className="flex items-center">
+                                <Label htmlFor="password">Password</Label>
+                                <a
+                                    href="#"
+                                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                                >
+                                    Forgot your password?
+                                </a>
+                            </div>
+                            <Input id="password" type="password" onChange={e => setPassword(e.target.value)} required />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <DialogClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <Button type="submit">Login</Button>
+                    </DialogFooter>
+                </form>
             </DialogContent>
-
-        </DialogRoot>
+        </Dialog>
     )
 }

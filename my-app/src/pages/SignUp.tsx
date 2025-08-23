@@ -2,11 +2,21 @@ import {useState} from 'react'
 import { useNavigate } from "react-router-dom"
 import { useEffect } from 'react';
 
-import { Input, Button, Stack} from '@chakra-ui/react'
-import { DialogActionTrigger, DialogBody, DialogCloseTrigger, DialogContent, DialogFooter, DialogHeader, DialogRoot, DialogTitle, DialogTrigger} from "../components/ui/dialog"
-import { Field } from "../components/ui/field"
-import { PasswordInput, PasswordStrengthMeter } from "../components/ui/password-input"
-import { passwordStrength } from 'check-password-strength'
+import { Input } from "@/components/ui/input"
+
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 export default function SignUp(props){
     const navigate = useNavigate();
@@ -70,56 +80,42 @@ export default function SignUp(props){
     }
 
     return (
-        <DialogRoot placement="top" motionPreset="slide-in-bottom" open={isOpen} onInteractOutside={() => setIsOpen(false)}>
+        <Dialog>
             <DialogTrigger asChild>
-                <Button size="lg" colorPalette="teal" variant="outline" onClick={() => setIsOpen(true)}>Sign up</Button>
+                <Button variant="ghost">Sign up</Button>
             </DialogTrigger>
-
-            <DialogContent style={{backgroundColor: '#41392e'}}>
+            <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Sign up</DialogTitle>
+                    <DialogDescription>
+                        Create a new account now.
+                    </DialogDescription>
                 </DialogHeader>
-
-                <DialogBody>
-                    <Stack gap="4">
-                        <Field invalid={invalidDisplayName === '' ? false : true}
-                                label="Display Name"
-                                helperText="This is the name users see by default."
-                                errorText={invalidDisplayName}
-                                required>
-                            <Input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder="Display Name" />
-                        </Field>
-                        <Field invalid={invalidEmail === '' ? false : true}
-                                label="Email"
-                                errorText={invalidEmail}
-                                required>
-                            <Input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" />
-                        </Field>
-                        <Field invalid={invalidUsername === '' ? false : true}
-                                label="Username"
-                                errorText={invalidUsername}
-                                helperText="Username must be unique. Each user has a unique username."
-                                required>
-                            <Input value={username.toLowerCase()} onChange={e => setUsername(e.target.value.toLowerCase())} placeholder="Username" />
-                        </Field>
-                        <Field invalid={invalidPassword === '' ? false : true}
-                                label="Password"
-                                errorText={invalidPassword}
-                                helperText="Password must be at least 8 characters long."
-                                required>
-                            <PasswordInput value={password} onChange={e => setPassword(e.target.value)} placeholder="Password"/>
-                        </Field>
-                        <PasswordStrengthMeter value={passwordStrength(password).id + 1} placeholder="Password" />
-                    </Stack>
-                </DialogBody>
-
+                <div className="grid gap-4">
+                    <div className="grid gap-3">
+                        <Label htmlFor="name-1">Name</Label>
+                        <Input id="name-1" name="name" />
+                    </div>
+                    <div className="grid gap-3">
+                        <div className="flex items-center">
+                            <Label htmlFor="password">Password</Label>
+                            <a
+                                href="#"
+                                className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                            >
+                                Forgot your password?
+                            </a>
+                        </div>
+                        <Input id="password" type="password" required />
+                    </div>
+                </div>
                 <DialogFooter>
-                    <DialogActionTrigger asChild>
-                        <Button variant="ouline" onClick={() => setIsOpen(false)}>Cancel</Button>
-                    </DialogActionTrigger>
-                    <Button background="teal" color="white" onClick={signupFunction}>Sign up</Button>
+                    <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button type="submit">Signup</Button>
                 </DialogFooter>
             </DialogContent>
-        </DialogRoot>
+        </Dialog>
     )
 }

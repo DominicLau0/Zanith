@@ -1,6 +1,4 @@
 import { useEffect } from 'react';
-import { EmptyState } from "../components/ui/empty-state"
-import { List } from "@chakra-ui/react"
 import { MdErrorOutline  } from "react-icons/md"
 
 export default function Song(){
@@ -9,14 +7,6 @@ export default function Song(){
     }, []);
 
     return (
-        <EmptyState
-            icon={<MdErrorOutline />}
-            title="Page Not Found"
-            description="This page isn't available."
-        >
-            <List.Root variant="marker">
-                <List.Item>Try searching for something else.</List.Item>
-            </List.Root>
-        </EmptyState>
+        <h1 className='pageNotFound'>404 Not Found. Page Unavailable.</h1>
     )
 }

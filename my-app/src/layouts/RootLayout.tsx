@@ -9,16 +9,32 @@ import axios from 'axios';
 import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
 
-import { Box, Grid, GridItem, Text, Spacer, Heading, Stack, HStack, VStack, Center, Button, Kbd, Flex} from '@chakra-ui/react'
-import { BreadcrumbCurrentLink, BreadcrumbLink, BreadcrumbRoot} from "../components/ui/breadcrumb"
-import { InputGroup } from "../components/ui/input-group"
-import { Field } from "../components/ui/field"
-import { Avatar, AvatarGroup } from "../components/ui/avatar"
-import { LuSearch } from "react-icons/lu"
-import { MdSkipPrevious, MdSkipNext, MdOutlineRepeat, MdVolumeUp, MdVolumeOff } from "react-icons/md";
+import { MdSkipPrevious, MdSkipNext, MdOutlineRepeat, MdVolumeUp, MdVolumeOff, MdOutlinePlayCircleFilled } from "react-icons/md";
 
 import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/ui/input"
+
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
+
+import { Button } from "@/components/ui/button"
+
+import { Label } from "@/components/ui/label"
+
+import { ThemeProvider } from "@/components/theme-provider"
+import { useTheme } from "@/components/theme-provider"
+import { Moon, Sun } from "lucide-react"
+
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 const cookies = new Cookies();
 
@@ -273,31 +289,6 @@ export default function RootLayout(){
         }
     }
 
-    function HeaderConditional(){
-        console.log(username)
-        console.log("this")
-        console.log("This is the cookie value: " + cookies.get("sessionId"))
-        if (username === null){
-            return(
-                <>
-                    <SignUp setUsername={setUsername}/>
-                    <Login setUsername={setUsername}/>
-                </>
-            )
-        }else{
-            return(
-                <>
-                    <Avatar name={username} colorPalette={pickPalette(username)} />
-                    <Stack gap="0">
-                        <Text fontWeight="medium">{username}</Text>
-                        <Text color="fg.muted" textStyle="sm">{username}</Text>
-                    </Stack>
-                    <Button size="lg" colorPalette="teal" variant="solid" onClick={() => logout()}>Log out</Button>
-                </>
-            )
-        }
-    }
-
     console.log("test");
 
     useEffect(() => {
@@ -342,110 +333,85 @@ export default function RootLayout(){
     }, []);
 
     return(
-        <>
-            <main>
-                <Grid
-                    color='white'
-                    templateRows={{base: "repeat()", md: "repeat(3, 1fr)"}}
-                    templateColumns={{md: "repeat(8, 1fr)"}}
-                    gap={4}
-                    width='80%'
-                    margin='auto'
-                    maxWidth={1800}
-                >
-                    <GridItem minHeight="100vh" rowSpan={{base: 2, md: 3}} colSpan={{base: 7, md: 5}}>
-                        <HStack h="80px">
-                            <VStack>
-                                <Heading marginLeft={3} color="#D9D9D9" fontSize={40}>Browse</Heading>
-                            </VStack>
-                            <Spacer/>
-                            <InputGroup flex="1" startElement={<LuSearch/>} endElement={<Kbd>Enter</Kbd>}>
-                                <Input
-                                    placeholder="Search"
-                                    onChange={e => setSearch(e.target.value)}
-                                    onKeyDown={e => {if(e.key === "Enter") searchSong()}}
-                                />
-                            </InputGroup>
-                        </HStack>
-                        <Outlet context = {{switchFunction, like, lastPlayedTrack, username}}/>
-                    </GridItem>
-
-                    <GridItem minHeight="100vh" rowSpan={{base: 1, md: 3}} colSpan={{base: 7, md: 2}} marginRight={3}>
-                        <HStack h="80px">
-                            <Spacer/>
-                            <HeaderConditional />
-                        </HStack>
-                        <Box height="300px" bg='#322C23' shadow="md" borderRadius={10}>
-                            <Heading marginLeft={5} paddingTop={3} fontSize={20} color="#D9D9D9">Likes</Heading>
-                        </Box>
-                        <Box height="300px" bg='#322C23' shadow="md" borderRadius={10} marginTop={5}>
-                            <Heading marginLeft={5} paddingTop={3} fontSize={20} color="#D9D9D9">History</Heading>
-                        </Box>
-                    </GridItem>
-                </Grid>
-            </main>
-
-            <footer>
-                <div id="audioDiv"></div>
-                <div className="controls">
-                    <MdSkipPrevious/>
-                    <i className="material-symbols-rounded iconStyles controlsIcon" style={{fontSize: "35px"}} id="play_arrow" onClick={() => footerSwitchFunction()}>{play_pause}</i>
-                    <MdSkipNext/>
-                    <button onClick={repeat}>
-                        <MdOutlineRepeat style={{color: isRepeat ? "lightblue" : ""}}/>
-                    </button>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            <SidebarProvider>
+            <AppSidebar username={username}/>
+            <SidebarTrigger />
+            <header>
+                <div className="flex">
+                    <Input
+                        type="search"
+                        placeholder="Search tracks, artists..."
+                        onChange={e => setSearch(e.target.value)}
+                        onKeyDown={(e) => {if(e.key === "Enter") searchSong()}}
+                    />
+                    <SignUp/>
+                    <Login/>
                 </div>
-                <div className="musicDetails">
-                    {
-                        (() => {
-                            if(cookies.get("pictures") === undefined){
-                                return(
-                                    <div id="songCoverBackground">
-                                        <i className="material-symbols-rounded iconStyles" style={{fontSize:"25px"}}>headphones</i>
-                                    </div>
-                                )
-                            }else{
-                                return(
-                                    <div id="songCover">
-                                        <img className="songImageCover" id="imageSource" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_65,h_65,c_fill,q_100/${cookies.get("pictures")}`}></img>
-                                    </div>
-                                )
-                            }
-                        })()
-                    }
-                    <div className="titleAndArtist">
-                        <p className="musicPlayerTitle">{songTitle}</p>
-                        <p className="musicPlayerArtist">{songArtist}</p>
-                        <div className="timeStamp">
-                            <p className="beginningTime">{beginningTime}</p>
+            </header>
+            <Outlet context = {{switchFunction, like, lastPlayedTrack, username}}/>
+
+            <div className="flex-auto">
+                <footer className="bottom-0">
+                    <div className="flex items-center bg-stone-300">
+                        <div className="flex flex-none">
+                            <button className="size-10 bg-red-500">
+                                <MdSkipPrevious className="size-10"/>
+                            </button>
+                            <button className="size-10 bg-red-500">
+                                <MdOutlinePlayCircleFilled className="size-10" onClick={() => footerSwitchFunction()}/>
+                            </button>
+                            <button className="size-10 bg-red-500">
+                                <MdSkipNext className="size-10"/>
+                            </button>
+                            <button onClick={repeat} className="size-10 bg-red-500">
+                                <MdOutlineRepeat style={{color: isRepeat ? "lightblue" : ""}}/>
+                            </button>
+                        </div>
+                        
+                        <div className="flex flex-1 justify-stretch">
+                            {cookies.get("pictures") === undefined ? (
+                                <i className="material-symbols-rounded iconStyles" style={{fontSize:"25px"}}>headphones</i>
+                            ) : (
+                                <img className="size-15" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_1000,h_1000,c_fill,q_100/${cookies.get("pictures")}`}></img>
+                            )}
+
+                            <div>
+                                <p className="text-sm bg-red-500 font-semibold">{songTitle}</p>
+                                <p className="text-xs bg-red-500">{songArtist}</p>
+
+                                <div className="flex flex-auto">
+                                    <p>{beginningTime}</p>
+                                    <Slider
+                                        value={[songSlider]}
+                                        min={[0]}
+                                        max={[songSliderMax]}
+                                        defaultValue={[0]}
+                                        onValueCommit={handleSongSliderChange}
+                                    />
+                                    <p>{endTime}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-none bg-red-500">
+                            <button onClick={() => mute()}>
+                                {calculateVolume(volume)}
+                            </button>
                             <Slider
-                                className="w-full max-w-xl"
-                                value={[songSlider]}
-                                min={[0]}
-                                max={[songSliderMax]}
-                                defaultValue={[0]}
-                                onValueCommit={handleSongSliderChange}
+                                defaultValue={[30]}
+                                value={[volume]}
+                                onValueChange={(e) => setVolume(e)}
+                                max={100}
+                                step={1}
                             />
-                            <p className="endTime">{endTime}</p>
+                            <input id="volumeSlider" type="range" min="0" max="100" defaultValue="80" />
                         </div>
                     </div>
-                </div>
-                <div className="volumeControls">
-                    <button onClick={() => mute()}>
-                        {calculateVolume(volume)}
-                    </button>
-                <Slider
-                    className="w-full max-w-xl"
-                    defaultValue={[30]}
-                    value={[volume]}
-                    onValueChange={(e) => setVolume(e)}
-                    max={100}
-                    step={1}
-                />
-                <input id="volumeSlider" type="range" min="0" max="100" defaultValue="80" />
-                </div>
-            </footer>
-        </>
+                </footer>
+            </div>
+            </SidebarProvider>
+        </ThemeProvider>
     )
 }
 

@@ -1,6 +1,6 @@
 import { createBrowserRouter, Route, createRoutesFromElements, RouterProvider } from 'react-router-dom';
 import React from'react';
-import './styles.css';
+import './index.css';
 
 import Main, {mainLoader} from './pages/Main.tsx'
 import Login from './pages/Login.tsx'
@@ -14,8 +14,6 @@ import Song, {songLoader} from './pages/Song.tsx'
 import PageNotFound from './pages/PageNotFound.tsx'
 
 import RootLayout, {rootLoader} from './layouts/RootLayout.tsx'
-
-import { Provider } from './components/ui/provider.jsx';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -35,7 +33,7 @@ const router = createBrowserRouter(
 
 function App() {
     return (
-            <RouterProvider router={router}/>
+        <RouterProvider router={router}/>
     );
 }
 

@@ -5,7 +5,6 @@ import { NavLink, useNavigate, useLoaderData, useOutletContext } from "react-rou
 import axios from "axios"
 import DisplaySong from "../Reusable_Functions/display_song.js"
 import HomeIcon from "../icons/home.png"
-import { Stack, Box, Flex, Heading, Grid, SimpleGrid, GridItem, Text } from '@chakra-ui/react'
 
 export default function Home(){
     useEffect(() => {
@@ -19,9 +18,7 @@ export default function Home(){
 
     return (
         <>  
-            <Box height="300px" bg='#322C23' rounded="lg">
-                <Text marginLeft={5} paddingTop={3} fontSize={20} fontWeight="semibold" color="#D9D9D9">Explore Record Labels</Text>
-            </Box>
+
             {/*
             <div class = "pageContainer">
                 <div className="menuBar">
