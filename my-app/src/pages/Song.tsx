@@ -6,6 +6,10 @@ import DisplayComments from "../Reusable_Functions/display_comments.jsx";
 import ReactModal from 'react-modal';
 
 import { Badge } from "@/components/ui/badge"
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
+import { FaPlay } from "react-icons/fa";
+import { MdFavorite } from "react-icons/md";
 
 const api_key = "938647316156691";
 const cloud_name = "dw5heht2b";
@@ -264,22 +268,6 @@ export default function Song(){
         document.title = song.song[0].title + " by " + song.song[0].username;
 
         scrollToComments();
-        
-        let textarea = document.querySelector(".comment");
-        textarea.addEventListener('input', autoResize, false);
-
-        function autoResize() {
-            let scrollLeft = window.scrollX ||
-            (document.documentElement || document.body.parentNode || document.body).scrollLeft;
-
-            let scrollTop  = window.scrollY ||
-            (document.documentElement || document.body.parentNode || document.body).scrollTop;
-
-            this.style.height = 'auto';
-            this.style.height = this.scrollHeight + 'px';
-
-            window.scrollTo(scrollLeft, scrollTop);
-        }
 
         document.body.classList.add("profileSongBody");
         return () => {
@@ -289,66 +277,64 @@ export default function Song(){
 
     return (
         <>
-            <div className="songHeaderPicture">
-                <img className="songCoverImage" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_300,h_300,c_fill,q_100/${song.song[0].picture}`}  alt={`${song.song[0].title}`}/>
-                <div className="songTopInfo">
-                    <h1 className="songTitleFontSize">{song.song[0].title}
-                    {
-                        (() => {
-                            let date = new Date(song.song[0].date);
+            <div className="flex bg-zinc-300 dark:bg-zinc-600 rounded-xl mr-8">
+                <img className="rounded-xl m-4" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_200,h_200,c_fill,q_100/${song.song[0].picture}`}  alt={`${song.song[0].title}`}/>
+                <div className="m-2">
+                    <div className="flex">
+                        <div className="flex-1">
+                            <h1 className="text-2xl font-semibold tracking-tight">{song.song[0].title}</h1>
+                            <NavLink to={"/profile/" + song.song[0].username} className="tracking-tight" style={{display: "inline-block"}}>{song.song[0].username}</NavLink>
+                        </div>
+                        <div className="flex-2">
+                            {
+                                (() => {
+                                    let date = new Date(song.song[0].date);
 
-                            return(
-                                <span className="dateSongStyle" title={date.toString()}>{date.toDateString()}</span>
-                            )
-                        })()
-                    }
-                    {
-                        (() => {
-                            if(song.song[0].genre === "Classical"){
-                                return(<span className="genreDark genreClassical">{song.song[0].genre}</span>)
-                            }else if(song.song[0].genre === "Rock"){
-                                return(<span className="genreDark genreRock">{song.song[0].genre}</span>)
-                            }else if(song.song[0].genre === "Electronic"){
-                                return(<Badge variant="secondary">test</Badge>)
-                            }else if(song.song[0].genre === "Hip Hop"){
-                                return(<span className="genreDark genreHipHop">{song.song[0].genre}</span>)
-                            }else if(song.song[0].genre === "Rap"){
-                                return(<span className="genreDark genreRap">{song.song[0].genre}</span>)
-                            }else{
-                                return(<span className="genreDark genreOther">{song.song[0].genre}</span>)
-                            }
-                        })()
-                    }
-                    </h1>
-                    <NavLink to={"/profile/" + song.song[0].username} className="songArtistFontSize" style={{display: "inline-block"}}>{song.song[0].username}</NavLink>
-                    {/*<button>Play</button>*/}
-                    <div className="controls">
-                        <i className="songPlayIcon material-symbols-outlined">play_arrow</i>
-                        <span className="songListenCount">{song.song[0].listens}</span>
-                        {
-                            (() => {
-                                if(song.song[0].likes.includes(song.username)){
-                                    return (
-                                        <button className='songListenCount likeButtonLiked' id="likeButton" onClick={() => like()}>{song.song[0].likes.length}
-                                            <i style={{verticalAlign: "top", float: "left"}} className="iconSize material-symbols-outlined">favorite</i>
-                                        </button>
-                                    )
-                                }else{
                                     return(
-                                        <button className='songListenCount likeButton' id="likeButton" onClick={() => like()}>{song.song[0].likes.length}
-                                            <i style={{verticalAlign: "top", float: "left"}} className="iconSize material-symbols-outlined">favorite</i>
-                                        </button>
+                                        <h2 className="dateSongStyle" title={date.toString()}>{date.toDateString()}</h2>
                                     )
-                                }
-                            })()
-                        }
+                                })()
+                            }
+                            {
+                                (() => {
+                                    if(song.song[0].genre === "Classical"){
+                                        return(<span className="genreDark genreClassical">{song.song[0].genre}</span>)
+                                    }else if(song.song[0].genre === "Rock"){
+                                        return(<span className="genreDark genreRock">{song.song[0].genre}</span>)
+                                    }else if(song.song[0].genre === "Electronic"){
+                                        return(<Badge variant="secondary">{song.song[0].genre}</Badge>)
+                                    }else if(song.song[0].genre === "Hip Hop"){
+                                        return(<span className="genreDark genreHipHop">{song.song[0].genre}</span>)
+                                    }else if(song.song[0].genre === "Rap"){
+                                        return(<span className="genreDark genreRap">{song.song[0].genre}</span>)
+                                    }else{
+                                        return(<Badge>{song.song[0].genre}</Badge>)
+                                    }
+                                })()
+                            }
+                        </div>
+                    </div>
+                    {/*<button>Play</button>*/}
+                    <div className="flex">
+                        <div className="flex items-center">
+                            <FaPlay/>
+                            <span className="ml-1">{song.song[0].listens}</span>
+                        </div>
+                        <Button className='flex cursor-pointer ml-2' onClick={() => like()}>
+                            {song.song[0].likes.includes(song.username) ? (
+                                <MdFavorite className="fill-red-400"/>
+                            ) : (
+                                <MdFavorite/>
+                            )}
+                            <span>{song.song[0].likes.length}</span>
+                        </Button>
                     </div>
                 </div>
             </div>
             <div className="profileContainer">
-                <div className="songDisplay">
-                    <div className="descriptionContainer">
-                        <h3 className='descriptionHead'>Description</h3>
+                <div className="mr-8">
+                    <div className="bg-slate-400 dark:bg-slate-600 rounded-lg mt-4">
+                        <h3 className='p-2 text-xl font-semibold tracking-tight'>Description</h3>
                         {
                             (() => {
                                 if(song.username === song.song[0].username){
@@ -415,15 +401,11 @@ export default function Song(){
                                 }
                             })()
                         }
+                        <pre className="p-2 pt-0 font-sans tracking-tight">{song.song[0].description}</pre>
                     </div>
-                    <hr />
-                    <pre className="description">{song.song[0].description}</pre>
-                    <h3 id="commentHeader">{numberOfComments} Comments</h3>
-                    <hr />
-                    <textarea className="comment" name="comment" onChange={e => setComments(e.target.value)} id="commentTextArea" placeholder="Comment on this song"></textarea>
-                    <div>
-                        <button className='submitSong' onClick={comment}>Comment</button>
-                    </div>
+                    <h3 className="p-2 text-xl font-semibold tracking-tight">{numberOfComments} Comments</h3>
+                    <Textarea placeholder="Add a comment..." onChange={e => setComments(e.target.value)}/>
+                    <Button className='mt-2' onClick={comment}>Comment</Button>
                     <DisplayComments song={song} deleteComment={deleteComment} commentState={commentState}/>
                 </div>
             </div>

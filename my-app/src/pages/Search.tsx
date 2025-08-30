@@ -2,6 +2,8 @@ import React, { useEffect } from 'react'
 import { useParams, useLoaderData, useOutletContext, useNavigate } from 'react-router-dom';
 import DisplaySong from "../Reusable_Functions/display_song.js"
 import axios from 'axios';
+import { MdAccountCircle } from "react-icons/md";
+import { Separator } from "@/components/ui/separator"
 
 function RenderSearch({ songs }){
     let { switchFunction, like, lastPlayedTrack }  = useOutletContext();
@@ -10,21 +12,15 @@ function RenderSearch({ songs }){
 
     if(songs.artist.length !== 0){
         return(
-            <>
-                <h3>Artists</h3>
-                <div className="searchArtistContainer" onClick={() => navigate(`/profile/${songs.artist}`)}>
-                    <i style={{fontSize:"40px", marginLeft: "20px"}} className="material-symbols-outlined iconStyles">account_circle</i>
-                    <p style={{marginLeft: "10px"}}>{songs.artist}</p>
-                </div>
-            </>
+            <div className="flex items-center cursor-pointer w-80 rounded-xl mt-3 p-3 bg-stone-400" onClick={() => navigate(`/profile/${songs.artist}`)}>
+                <MdAccountCircle className="size-10 object-scale-down"/>
+                <p className="mx-4 text-xl font-semibold tracking-tight">{songs.artist}</p>
+            </div>
         )
     }
     if(songs.songs.length !== 0){
         return(
-            <>
-                <h3>Songs</h3>
-                <DisplaySong songs={songs} switchFunction={switchFunction} like={like} lastPlayedTrack={lastPlayedTrack}/>
-            </>
+            <DisplaySong songs={songs} switchFunction={switchFunction} like={like} lastPlayedTrack={lastPlayedTrack}/>
         )
     }
     if(songs.artist.length === 0 && songs.songs.length === 0){
@@ -45,8 +41,8 @@ export default function Search(){
 
     return (
         <div className='searchDisplay'>
-            <h2>Search results for "{searchValue}"</h2>
-            <hr />
+            <h2 className="text-lg font-semibold tracking-tight">Search results for "{searchValue}"</h2>
+            <Separator/>
             <RenderSearch songs={songs} />
         </div>
     )

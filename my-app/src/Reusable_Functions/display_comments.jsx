@@ -1,4 +1,5 @@
-import React from 'react'
+import { Button } from "@/components/ui/button"
+import { MdDelete } from "react-icons/md";
 
 export default function DisplayComments(props){ 
     return(
@@ -33,9 +34,9 @@ export default function DisplayComments(props){
                             (() => {
                                 if(props.song.username === Object.keys(comments)[0]){
                                     return(
-                                        <div className="buttonCommentBar">
-                                            <i className='iconSize material-symbols-outlined iconStyles commentButtonModifier' onClick={() => props.deleteComment(comments.id)}>delete</i>
-                                        </div>
+                                        <Button>
+                                            <MdDelete onClick={() => props.deleteComment(comments.id)}/>
+                                        </Button>
                                     )
                                 }
                             })()

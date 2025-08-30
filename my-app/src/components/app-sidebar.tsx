@@ -1,4 +1,6 @@
-import { Home, Search, Library, Heart, Plus, User, LogOut, Upload, Inbox, Calendar } from "lucide-react"
+import { Home, Search, History, Heart, Plus, User, LogOut, Upload, Inbox, Calendar } from "lucide-react"
+import { MdPerson } from "react-icons/md";
+
 import { NavLink, Outlet, useNavigate, useLoaderData, useLocation} from "react-router-dom"
 import { ThemeToggle } from "@/components/theme-toggle"
 
@@ -13,7 +15,8 @@ import {
   SidebarMenuItem,
   SidebarHeader,
   SidebarSeparator,
-  SidebarFooter
+  SidebarFooter,
+  SidebarInset
 } from "@/components/ui/sidebar"
 
 import logo_dark from '../icons/dark-logo.png'
@@ -43,10 +46,11 @@ export function AppSidebar({username}) {
     ]
     return (
         <Sidebar variant="inset" collapsible = "icon">
+        <SidebarInset>
             <SidebarHeader>
                 <div className="flex items-center justify-between">
-                    <img src={logo_dark} className="h-7 w-7 object-scale-down block dark:hidden" alt="Logo"/>
-                    <img src={logo_light} className="h-7 w-7 object-scale-down hidden dark:block"alt="Logo"/>
+                    <img src={logo_dark} className="size-7 object-scale-down block dark:hidden" alt="Logo"/>
+                    <img src={logo_light} className="size-7 object-scale-down hidden dark:block"alt="Logo"/>
                     <span className="font-semibold text-base">Zanith</span>
                     <ThemeToggle />
                 </div>
@@ -69,9 +73,9 @@ export function AppSidebar({username}) {
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                             <SidebarMenuItem>
-                                <SidebarMenuButton onClick={() => navigate(`/library`)} isActive={location.pathname === "/library"}>
-                                    <Library/>
-                                    <span>Your Library</span>
+                                <SidebarMenuButton onClick={() => navigate(`/profile`)} isActive={location.pathname.startsWith("/profile")}>
+                                    <MdPerson/>
+                                    <span>Profile</span>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                         </SidebarMenu>
@@ -90,15 +94,15 @@ export function AppSidebar({username}) {
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                             <SidebarMenuItem>
-                                <SidebarMenuButton onClick={() => navigate(`/playlist`)} isActive={location.pathname.startsWith("/playlist")}>
-                                    <Plus/>
-                                    <span>Create Playlist</span>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                            <SidebarMenuItem>
                                 <SidebarMenuButton onClick={() => navigate(`/likes`)} isActive={location.pathname === "/likes"}>
                                     <Heart/>
                                     <span>Liked Songs</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton onClick={() => navigate(`/history`)} isActive={location.pathname === ("/history")}>
+                                    <History/>
+                                    <span>History</span>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                         </SidebarMenu>
@@ -109,6 +113,7 @@ export function AppSidebar({username}) {
             <SidebarFooter>
 
             </SidebarFooter>
+        </SidebarInset>
         </Sidebar>
     )
 }

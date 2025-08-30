@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, useLoaderData, useOutletContext } from 'react-router-dom';
+import { Separator } from "@/components/ui/separator"
 import DisplaySong from "../Reusable_Functions/display_song.js";
 import axios from 'axios';
 import Cropper from 'cropperjs';
@@ -74,19 +75,13 @@ export default function ArtistName(){
 
     return (
         <>  
-            <div id="profileHeaderPicture">
-                <h2 className="authenticationTitle">{artistName}</h2>
+            <div className="bg-stone-400 dark:bg-stone-500 rounded-md h-50 mr-8">
+                <h2 className="p-4 text-2xl font-semibold tracking-tight">{artistName}</h2>
                 {/*<input className="songUpload" type="file" id="bannerImage" name="bannerImage" onChange={profileBannerImage} accept="image/*" />*/}
             </div>
             <div className="profileContainer">
-               <div>
-                    <h4>Followers</h4>
-                    <h3>Following</h3>
-                    <h3>Tracks</h3>
-                </div>
                 <div className="songDisplay">
-                    <h3>Songs</h3>
-                    <hr />
+                    <Separator/>
                     <DisplaySong songs={songs} switchFunction={switchFunction} like={like} lastPlayedTrack={lastPlayedTrack} username={username}/>
                 </div>
             </div>

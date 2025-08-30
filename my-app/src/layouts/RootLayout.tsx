@@ -337,78 +337,80 @@ export default function RootLayout(){
             <SidebarProvider>
             <AppSidebar username={username}/>
             <SidebarTrigger />
-            <header>
-                <div className="flex">
+            <div className="w-full">
+                <header className="flex gap-4 my-4 mr-8">
+                    <h2 className="text-3xl flex-1 font-semibold tracking-tight">Home</h2>
                     <Input
                         type="search"
+                        className="w-1/3"
                         placeholder="Search tracks, artists..."
                         onChange={e => setSearch(e.target.value)}
                         onKeyDown={(e) => {if(e.key === "Enter") searchSong()}}
                     />
                     <SignUp/>
                     <Login/>
-                </div>
-            </header>
-            <Outlet context = {{switchFunction, like, lastPlayedTrack, username}}/>
+                </header>
+                <Outlet context = {{switchFunction, like, lastPlayedTrack, username}}/>
 
-            <div className="flex-auto">
-                <footer className="bottom-0">
-                    <div className="flex items-center bg-stone-300">
-                        <div className="flex flex-none">
-                            <button className="size-10 bg-red-500">
-                                <MdSkipPrevious className="size-10"/>
-                            </button>
-                            <button className="size-10 bg-red-500">
-                                <MdOutlinePlayCircleFilled className="size-10" onClick={() => footerSwitchFunction()}/>
-                            </button>
-                            <button className="size-10 bg-red-500">
-                                <MdSkipNext className="size-10"/>
-                            </button>
-                            <button onClick={repeat} className="size-10 bg-red-500">
-                                <MdOutlineRepeat style={{color: isRepeat ? "lightblue" : ""}}/>
-                            </button>
-                        </div>
-                        
-                        <div className="flex flex-1 justify-stretch">
-                            {cookies.get("pictures") === undefined ? (
-                                <i className="material-symbols-rounded iconStyles" style={{fontSize:"25px"}}>headphones</i>
-                            ) : (
-                                <img className="size-15" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_1000,h_1000,c_fill,q_100/${cookies.get("pictures")}`}></img>
-                            )}
+                <div className="flex flex-auto">
+                    <footer className="bottom-0">
+                        <div className="flex items-center bg-stone-300">
+                            <div className="flex flex-none">
+                                <button className="size-10 bg-red-500">
+                                    <MdSkipPrevious className="size-10"/>
+                                </button>
+                                <button className="size-10 bg-red-500">
+                                    <MdOutlinePlayCircleFilled className="size-10" onClick={() => footerSwitchFunction()}/>
+                                </button>
+                                <button className="size-10 bg-red-500">
+                                    <MdSkipNext className="size-10"/>
+                                </button>
+                                <button onClick={repeat} className="size-10 bg-red-500">
+                                    <MdOutlineRepeat style={{color: isRepeat ? "lightblue" : ""}}/>
+                                </button>
+                            </div>
+                            
+                            <div className="flex flex-1 justify-stretch">
+                                {cookies.get("pictures") === undefined ? (
+                                    <i className="material-symbols-rounded iconStyles" style={{fontSize:"25px"}}>headphones</i>
+                                ) : (
+                                    <img className="size-15" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_1000,h_1000,c_fill,q_100/${cookies.get("pictures")}`}></img>
+                                )}
 
-                            <div>
-                                <p className="text-sm bg-red-500 font-semibold">{songTitle}</p>
-                                <p className="text-xs bg-red-500">{songArtist}</p>
+                                <div>
+                                    <p className="text-sm bg-red-500 font-semibold">{songTitle}</p>
+                                    <p className="text-xs bg-red-500">{songArtist}</p>
 
-                                <div className="flex flex-auto">
-                                    <p>{beginningTime}</p>
-                                    <Slider
-                                        value={[songSlider]}
-                                        min={[0]}
-                                        max={[songSliderMax]}
-                                        defaultValue={[0]}
-                                        onValueCommit={handleSongSliderChange}
-                                    />
-                                    <p>{endTime}</p>
+                                    <div className="flex flex-auto">
+                                        <p>{beginningTime}</p>
+                                        <Slider
+                                            value={[songSlider]}
+                                            min={[0]}
+                                            max={[songSliderMax]}
+                                            defaultValue={[0]}
+                                            onValueCommit={handleSongSliderChange}
+                                        />
+                                        <p>{endTime}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="flex flex-none bg-red-500">
-                            <button onClick={() => mute()}>
-                                {calculateVolume(volume)}
-                            </button>
-                            <Slider
-                                defaultValue={[30]}
-                                value={[volume]}
-                                onValueChange={(e) => setVolume(e)}
-                                max={100}
-                                step={1}
-                            />
-                            <input id="volumeSlider" type="range" min="0" max="100" defaultValue="80" />
+                            <div className="flex flex-none bg-red-500">
+                                <button onClick={() => mute()}>
+                                    {calculateVolume(volume)}
+                                </button>
+                                <Slider
+                                    defaultValue={[30]}
+                                    value={[volume]}
+                                    onValueChange={(e) => setVolume(e)}
+                                    max={100}
+                                    step={1}
+                                />
+                                <input id="volumeSlider" type="range" min="0" max="100" defaultValue="80" />
+                            </div>
                         </div>
-                    </div>
-                </footer>
+                    </footer>
+                </div>
             </div>
             </SidebarProvider>
         </ThemeProvider>
