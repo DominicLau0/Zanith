@@ -280,7 +280,7 @@ export default function Song(){
             <div className="flex bg-zinc-300 dark:bg-zinc-600 rounded-xl mr-8">
                 <img className="rounded-xl m-4" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_200,h_200,c_fill,q_100/${song.song[0].picture}`}  alt={`${song.song[0].title}`}/>
                 <div className="m-2">
-                    <div className="flex">
+                    <div className="flex justify-between items-center w-full">
                         <div className="flex-1">
                             <h1 className="text-2xl font-semibold tracking-tight">{song.song[0].title}</h1>
                             <NavLink to={"/profile/" + song.song[0].username} className="tracking-tight" style={{display: "inline-block"}}>{song.song[0].username}</NavLink>

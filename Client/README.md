@@ -1,54 +1,54 @@
-# Zanith
-## Description
-Zanith is a music streaming website where users can upload their songs to the website which allows other users to listen to it. Users can do basic things such as like and comment a song, as well as search for artists and songs on Zanith. Users are also allowed to upload songs that they own to the website.
+# React + TypeScript + Vite
 
-Website: https://zanith.me or https://zanith-server.onrender.com.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## New Users
-New users have to signup here: https://zanith.me/signup.
+Currently, two official plugins are available:
 
-## Homepage
-### Introduction
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-This is the homepage of Zanith. Here users can explore different record labels as well as recommended songs and artists that they may like.
+## Expanding the ESLint configuration
 
-Since I haven't really figured out how to implement the recommendation system, for now the homepage is the same for all users.
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-![image](https://github.com/DominicLau0/Zanith/assets/129682941/fa51da03-2660-4d82-84d6-f2527a7a3afc)
+```js
+export default tseslint.config({
+  extends: [
+    // Remove ...tseslint.configs.recommended and replace with this
+    ...tseslint.configs.recommendedTypeChecked,
+    // Alternatively, use this for stricter rules
+    ...tseslint.configs.strictTypeChecked,
+    // Optionally, add this for stylistic rules
+    ...tseslint.configs.stylisticTypeChecked,
+  ],
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-## Songs
-Users can navigate to individual songs and see basic information about the songs.
-Commenting on songs are now possible and they now display the date and time of when it was commented.
-
-![image](https://github.com/DominicLau0/Zanith/assets/129682941/a49178b7-9914-4bc2-b272-9e4af0e653f7)
-
-
-
-## Search
-Users can search for artists and songs that are on Zanith and it should display the name of the artist, as well as all the songs that they've uploaded.
-
-![image](https://github.com/DominicLau0/Zanith/assets/129682941/4d9c8547-98d0-4158-a711-f8eafe3176a7)
-
-
-
-## Upload
-Users can upload songs to Zanith provided that they created the song themselves.
-
-![image](https://user-images.githubusercontent.com/129682941/236644209-335af941-4284-4674-9e57-cbd0160fad63.png)
-
-
-
-## Profile
-Here is the profile page of the user "ClaytonAQDF". It lists all the songs that the user uploaded on Zanith.
-
-![image](https://user-images.githubusercontent.com/129682941/236644249-35ae1d8c-11cf-4968-8d8d-c0cd9356e505.png)
-
-
-
-### Record Labels
-
-Record labels that are affiliated to songs uploaded on Zanith have their own independent page which lists all the artists that have songs under the record label. 
-
-![image](https://user-images.githubusercontent.com/129682941/236641706-2c69018e-3bea-401a-b3af-d088d617cd95.png)
+export default tseslint.config({
+  plugins: {
+    // Add the react-x and react-dom plugins
+    'react-x': reactX,
+    'react-dom': reactDom,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended typescript rules
+    ...reactX.configs['recommended-typescript'].rules,
+    ...reactDom.configs.recommended.rules,
+  },
+})
+```
