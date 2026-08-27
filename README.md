@@ -41,3 +41,5 @@ Users can upload songs to Zanith provided that they created the song themselves.
 Here is the profile page of the user "ClaytonAQDF". It lists all the songs that the user uploaded on Zanith.
 
 <img width="1894" height="898" alt="Screenshot 2026-08-27 110251" src="https://github.com/user-attachments/assets/e8397cc6-2158-464a-b573-923fddb35c5c" />
+<img width="1903" height="898" alt="Screenshot 2026-08-27 110940" src="https://github.com/user-attachments/assets/958d5531-41c5-40a0-be1d-ab546aa14cb0" />
+
