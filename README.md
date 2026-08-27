@@ -2,6 +2,9 @@
 ## Description
 Zanith is a music streaming website where users can upload their songs to the website which allows other users to listen to it. Users can do basic things such as like and comment a song, as well as search for artists and songs on Zanith. Users are also allowed to upload songs that they own to the website.
 
+> [!NOTE]
+> Website currently undergoing major redesign. Unstable release.
+
 ## Homepage
 ### Introduction
 
