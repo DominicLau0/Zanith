@@ -30,16 +30,10 @@ export default function DisplayComments(props){
                             }
                             <p className="commentText" id={comments.id}>{comments[Object.keys(comments)[0]]}</p>
                         </div>
-                        {
-                            (() => {
-                                if(props.song.username === Object.keys(comments)[0]){
-                                    return(
-                                        <Button>
-                                            <MdDelete onClick={() => props.deleteComment(comments.id)}/>
-                                        </Button>
-                                    )
-                                }
-                            })()
+                        {props.song.username === Object.keys(comments)[0] && 
+                            <Button>
+                                <MdDelete onClick={() => props.deleteComment(comments.id)}/>
+                            </Button>
                         }
                     </div>
                 )

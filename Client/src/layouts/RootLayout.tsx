@@ -9,7 +9,7 @@ import axios from 'axios';
 import Login from '../pages/Login';
 import SignUp from '../pages/SignUp';
 
-import { MdSkipPrevious, MdSkipNext, MdOutlineRepeat, MdVolumeUp, MdVolumeOff, MdOutlinePlayCircleFilled } from "react-icons/md";
+import { MdSkipPrevious, MdSkipNext, MdOutlineRepeat, MdVolumeUp, MdVolumeOff, MdVolumeDown, MdOutlinePlayCircleFilled, MdHeadphones  } from "react-icons/md";
 
 import { Slider } from "@/components/ui/slider"
 import { Input } from "@/components/ui/input"
@@ -38,8 +38,6 @@ import {
 
 const cookies = new Cookies();
 
-let currentSong = document.createElement('audio');
-
 let lastPlayedTrack;
 let interval;
 let lastVolume = 0.8;
@@ -56,7 +54,7 @@ function like(trackId){
             likeAmount = JSON.parse(this.responseText).like;
             newLike = JSON.parse(this.responseText).newLike;
 
-            document.getElementById(`likeAmount:${trackId}`).textContent = likeAmount;        
+            document.getElementById(`likeAmount:${trackId}`).textContent = likeAmount;
 
             if(newLike === true){
                 document.getElementById(`likeIcon:${trackId}`).style.color = "lightcoral";
@@ -99,319 +97,380 @@ function calculateVolume(volume){
     }
 }
 
-//Displays the song image in the music player.
-function displaySongImage(pictureId){
-    if(cookies.get("pictures") !== undefined && document.getElementById("imageSource") !== null){
-        document.getElementById("imageSource").src = `https://res.cloudinary.com/${cloud_name}/image/upload/w_65,h_65,c_fill,q_100/${pictureId}`;
-    }else{
-        document.getElementById("songCoverBackground").outerHTML = `<div id="songCover"><img class="songImageCover" id="imageSource" src="https://res.cloudinary.com/${cloud_name}/image/upload/w_65,h_65,c_fill,q_100/${pictureId}"></div>`;
-    }
-}
-
 export default function RootLayout(){
-    const [songTitle, setSongTitle] = useState("");
-    const [songArtist, setSongArtist] = useState("");
+    const [songTitle, setSongTitle] = useState("Song Title");
+    const [songArtist, setSongArtist] = useState("Artist");
+    const [songPicture, setSongPicture] = useState(null);
+
     
-    const [beginningTime, setBeginningTime] = useState("0:00");
+    const [songSlider, setSongSlider] = useState(0);
+    const [songSliderMax, setSongSliderMax] = useState(0);
 
-    const [songSlider, setSongSlider] = useState(); //delete this
-    const [songSliderRef, setSongSliderRef] = useState(null);
-    const [songSliderMax, setSongSliderMax] = useState();
-
-    const [currentTrack, setCurrentTrack] = useState("");
     const [isShuffle, setIsShuffle] = useState(false);
     const [isRepeat, setIsRepeat] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const [volume, setVolume] = useState(20)
+    const [volume, setVolume] = useState(80);
+    const lastVolume = useRef(80);
 
-    const [time, setTime] = useState(0);
-    const [endTime, setEndTime] = useState(0);
-
-    const [play_pause, setPlayPause] = useState("play_arrow");
-
-    const audioRef = useRef(null);
-
-    const colorPalette = ["red", "blue", "green", "yellow", "purple", "orange"]
-
-    const [search, setSearch] = useState()
-
-    //For some reason putting this outside the function breaks the website.
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const [lastPlayedTrack, setLastPlayedTrack] = useState(null);
+    
+    const [search, setSearch] = useState("");
     const navigate = useNavigate();
-    const [username, setUsername] = useState(useLoaderData());
 
-    function playSong(trackId, pictureId){
-        if(trackId === undefined || pictureId === undefined){
+    const loaderData = useLoaderData()
+    const [username, setUsername] = useState(() => loaderData ?? null);
+
+    useEffect(() => {
+        const audio = new Audio();
+        audioRef.current = audio;
+
+        const savedSong = cookies.get("song");
+        const savedPicture = cookies.get("pictures");
+        const savedTitle = cookies.get("title");
+        const savedArtist = cookies.get("artist");
+
+        if(savedSong){
+            setLastPlayedTrack(savedSong);
+            setSongTitle(savedTitle ?? "Song Title");
+            setSongArtist(savedArtist ?? "Artist");
+            setSongPicture(savedPicture ?? null);
+
+            audio.src = `https://res.cloudinary.com/${cloud_name}/video/upload/${savedSong}`;
+            audio.load();
+        }
+
+        const handleTimeUpdate = () => {
+            setSongSlider(audio.currentTime || 0);
+        };
+
+        const handleLoadedMetadata = () => {
+            setSongSliderMax(Number.isFinite(audio.duration) ? audio.duration : 0);
+        };
+
+        const handlePlay = () => {
+            setIsPlaying(true);
+        };
+
+        const handlePause = () => {
+            setIsPlaying(false);
+        };
+
+        const handleEnded = () => {
+            setIsPlaying(false);
+
+            if(audio.loop){
+                return;
+            }
+
+            setSongSlider(0);
+        };
+
+        audio.addEventListener("timeupdate", handleTimeUpdate);
+        audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+        audio.addEventListener("play", handlePlay);
+        audio.addEventListener("pause", handlePause);
+        audio.addEventListener("ended", handleEnded);
+
+        return () => {
+            audio.pause();
+            audio.removeEventListener("timeupdate", handleTimeUpdate);
+            audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+            audio.removeEventListener("play", handlePlay);
+            audio.removeEventListener("pause", handlePause);
+            audio.removeEventListener("ended", handleEnded);
+            audio.src = "";
+
+            if(audioRef.current === audio){
+                audioRef.current = null;
+            }
+        };
+    }, []);
+
+    function setPlayerTrackCookie(trackId, pictureId, title, artist){
+        const cookieOptions = {
+            path: '/',
+            maxAge: 1000 * 60 * 60 * 24 * 30
+        };
+
+        cookies.set("song", trackId, cookieOptions);
+        cookies.set("pictures", pictureId, cookieOptions);
+        cookies.set("title", title, cookieOptions);
+        cookies.set("artist", artist, cookieOptions);
+    }
+
+    async function playSong(trackId, pictureId){
+        const audio = audioRef.current;
+
+        if(!audio || trackId === undefined || pictureId === undefined){
             return;
         }
-    
+
+        // Only replace the source when the user picked a different song.
         if(trackId !== lastPlayedTrack){
-            if(lastPlayedTrack!==undefined){
-                pauseSong(lastPlayedTrack);
-            }
-            currentSong.src = `https://res.cloudinary.com/${cloud_name}/video/upload/${trackId}`;
-            currentSong.load();
+            audio.pause();
+            audio.src = `https://res.cloudinary.com/${cloud_name}/video/upload/${trackId}`;
+            audio.load();
+            setSongSlider(0);
+            setSongSliderMax(0);
+            setSongPicture(pictureId);
         }
-    
-        cookies.set("song", trackId, {path: '/', maxAge: 1000*60*60*24*30});
-        cookies.set("pictures", pictureId, {path: '/', maxAge: 1000*60*60*24*30});
-    
-        cancelAnimationFrame(interval);
-        displaySongImage(pictureId);
-        currentSong.play();
-    
-        document.getElementById(trackId).innerHTML = "pause_circle";
-        setPlayPause("pause");
-    
-        lastPlayedTrack = trackId;
+
+        setLastPlayedTrack(trackId);
+        setSongPicture(pictureId);
+
+        cookies.set("song", trackId, {path: '/', maxAge: 1000 * 60 * 60 * 24 * 30});
+        cookies.set("pictures", pictureId, {path: '/', maxAge: 1000 * 60 * 60 * 24 * 30});
+
+        try{
+            await audio.play();
+        }catch(error){
+            console.warn("Audio could not start automatically:", error);
+        }
     }
 
     function pauseSong(trackId){
-        currentSong.pause();
-    
-        cancelAnimationFrame(interval);
-        
-        /*
-        Basically if you're on a page playing a song called "Tropical Beach" and you navigate to a different page
-        and play a different song, it will pause this song to play the other song, but since this song might not appear on that page,
-        it will give document.getElementById a null value.
-        */
-        if(document.getElementById(trackId) !== null){
-            document.getElementById(trackId).innerHTML = "play_circle";
+        const audio = audioRef.current;
+
+        if(!audio){
+            return;
         }
-        setPlayPause("play_arrow");        
+
+        audio.pause();
+
+        if(trackId){
+            const songButton = document.getElementById(trackId);
+            if(songButton){
+                songButton.innerHTML = "play_circle";
+            }
+        }
     }
 
     function repeat(){
-        setIsRepeat(prev => !prev)
-        currentSong.loop = !currentSong.loop
+        const audio = audioRef.current;
+        if(!audio){
+            return;
+        }
+
+        const newRepeatValue = !audio.loop;
+        audio.loop = newRepeatValue;
+        setIsRepeat(newRepeatValue);
+    }
+
+    function handleVolumeChange(value){
+        const newVolume = Number(value[0] ?? 0);
+
+        setVolume(newVolume);
+
+        if(newVolume > 0){
+            lastVolume.current = newVolume;
+        }
+
+        if(audioRef.current){
+            audioRef.current.volume = newVolume / 100;
+        }
     }
 
     function mute(){
-        if(currentSong.volume !== 0){
-            setVolume(0)
-            lastVolume = currentSong.volume;
-            currentSong.volume = 0;
+        const audio = audioRef.current;
+        if(!audio){
+            return;
+        }
+
+        if(volume > 0){
+            lastVolume.current = volume;
+            setVolume(0);
+            audio.volume = 0;
+
         }else{
-            currentSong.volume = lastVolume;
-            calculateVolume(currentSong.volume);
-            document.getElementById("volumeSlider").value = lastVolume * 100;
+            const restoredVolume = lastVolume.current > 0 ? lastVolume.current : 80;
+
+            setVolume(restoredVolume);
+            audio.volume = restoredVolume / 100;
         }
     }
 
     function logout(){
         pauseSong(lastPlayedTrack);
-        currentSong.src = "";
-    
+
+        if(audioRef.current){
+            audioRef.current.src = "";
+            audioRef.current.load();
+        }
+
+        setLastPlayedTrack(null);
+        setSongPicture(null);
+        setSongTitle("Song Title");
+        setSongArtist("Artist");
+        setSongSlider(0);
+        setSongSliderMax(0);
+
         let xhttp = new XMLHttpRequest();
-    
+
         xhttp.open("POST", "http://localhost:5000/logout", false);
         xhttp.withCredentials = true;
         xhttp.send();
 
-        setUsername(null)
+        setUsername(null);
     }
 
     function switchFunction(trackId, pictureId, username, title){
-        if(trackId !== lastPlayedTrack || currentSong.paused){
-            if(trackId !== lastPlayedTrack){
-                setSongTitle(title);
-                setSongArtist(username);
-                cookies.set("title", title, {path: '/', maxAge: 1000*60*60*24*30});
-                cookies.set("artist", username, {path: '/', maxAge: 1000*60*60*24*30});
-            }
+        const audio = audioRef.current;
+
+        if(!audio){
+            return;
+        }
+
+        if(trackId !== lastPlayedTrack){
+            setSongTitle(title);
+            setSongArtist(username);
+            setPlayerTrackCookie(trackId, pictureId, title, username);
             playSong(trackId, pictureId);
-            interval = requestAnimationFrame(updateTimeStamp);
+        }else if(audio.paused){
+            playSong(trackId, pictureId);
         }else{
             pauseSong(trackId);
         }
     }
 
     function footerSwitchFunction(){
-        if(currentSong.src === ""){
+        const audio = audioRef.current;
+
+        if(!audio || !audio.src){
             return;
         }
-        if(currentSong.paused){
-            cancelAnimationFrame(interval);
-            currentSong.play();
-            interval = requestAnimationFrame(updateTimeStamp);
-            setPlayPause("pause");
-            
-            if(document.getElementById(lastPlayedTrack) !== null){
-                document.getElementById(lastPlayedTrack).innerHTML = "pause_circle";
-            }
+
+        if(audio.paused){
+            audio.play().catch(error => {
+                console.warn("Audio could not start:", error);
+            });
         }else{
             pauseSong(lastPlayedTrack);
         }
     }
 
-    /*Updates the current timestamp of the song*/
-    function updateTimeStamp(){
-        interval = requestAnimationFrame(updateTimeStamp);
-        if(!isNaN(currentSong.duration)){
-            setSongSlider((currentSong.currentTime / currentSong.duration) * (currentSong.duration * 1000));
-            setBeginningTime(calculateTime(currentSong.currentTime));
-        }
-    }
-
-    function handleSongSliderInput(e){
-        const newValue = e.target.value;
-        setSongSlider(newValue);
-        setBeginningTime(calculateTime(newValue / 1000));
-
-        if(!currentSong.paused){
-            cancelAnimationFrame(interval);
-        }
-    }
-
     /*After the user changes the song range, it'll update the time.*/
-    function handleSongSliderChange(e){
-        const newValue = e.target.value;
+    function handleSongSliderChange(value){
+        const newValue = Number(value[0] ?? 0);
+        const audio = audioRef.current;
+
+        if(!audio || !Number.isFinite(audio.duration)){
+            return;
+        }
+
         setSongSlider(newValue);
-        
-        if(currentSong.src !== ""){
-            currentSong.currentTime = currentSong.duration * (songSlider / (currentSong.duration * 1000));
-        }
-
-        if(!currentSong.paused){
-            requestAnimationFrame(updateTimeStamp);
-        }
+        audio.currentTime = newValue;
     }
 
-    function pickPalette(name){
-        const index = name.charCodeAt(0) % colorPalette.length
-        return colorPalette[index]
-    }
-
-    function searchSong(){    
-        if(search !== ""){
+    function searchSong(){
+        if(search.trim() !== ""){
             navigate(`/search/${search}`);
         }
     }
 
-    console.log("test");
-
-    useEffect(() => {
-        const audio = new Audio(currentTrack);
-
-        let volumeSlider = document.getElementById("volumeSlider");
-
-        if(currentSong.src === ""){
-            if(cookies.get("title") === undefined || cookies.get("artist") === undefined || cookies.get("song") === undefined){
-                setSongTitle("Song Title");
-                setSongArtist("Artist");
-            }else{
-                setSongTitle(cookies.get("title"));
-                setSongArtist(cookies.get("artist"));
-                currentSong.src = `https://res.cloudinary.com/${cloud_name}/video/upload/${cookies.get("song")}`;
-                currentSong.load();
-                lastPlayedTrack = cookies.get("song");
-            }
-        }
-    
-        /*Output the total duration of the song*/
-        currentSong.onloadedmetadata = function(){
-            setEndTime(calculateTime(currentSong.duration));
-            setSongSliderMax(Math.floor(currentSong.duration * 1000));
-        };
-
-        /*Changes the volume of the song as well as the icon*/
-        volumeSlider.addEventListener('input', () =>{
-            currentSong.volume = document.getElementById("volumeSlider").value / 100;
-        
-            calculateVolume(currentSong.volume);
-        });
-
-        currentSong.addEventListener('ended', function() {
-            pauseSong(lastPlayedTrack);
-            cancelAnimationFrame(interval);
-        });
-    }, []);
-
-    useEffect(() => {
-
-    }, []);
-
     return(
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
             <SidebarProvider>
-            <AppSidebar username={username}/>
-            <SidebarTrigger />
-            <div className="w-full">
-                <header className="flex gap-4 my-4 mr-8">
-                    <h2 className="text-3xl flex-1 font-semibold tracking-tight">Home</h2>
-                    <Input
-                        type="search"
-                        className="w-1/3"
-                        placeholder="Search tracks, artists..."
-                        onChange={e => setSearch(e.target.value)}
-                        onKeyDown={(e) => {if(e.key === "Enter") searchSong()}}
-                    />
-                    <SignUp/>
-                    <Login/>
-                </header>
-                <Outlet context = {{switchFunction, like, lastPlayedTrack, username}}/>
+                <AppSidebar username={username}/>
+                <SidebarTrigger />
+                
+                <div className="w-full pb-24">
+                    <header className="flex gap-4 my-4 mr-8">
+                        <h2 className="text-3xl flex-1 font-semibold tracking-tight">Home</h2>
+                        <Input
+                            type="search"
+                            className="w-1/3"
+                            placeholder="Search tracks, artists..."
+                            onChange={e => setSearch(e.target.value)}
+                            onKeyDown={(e) => {if(e.key === "Enter") searchSong()}}
+                        />
+                        <SignUp/>
+                        <Login/>
+                    </header>
 
-                <div className="flex flex-auto">
-                    <footer className="bottom-0">
-                        <div className="flex items-center bg-stone-300">
+                    <Outlet context = {{
+                        switchFunction,
+                        like,
+                        lastPlayedTrack,
+                        username
+                    }}/>
+
+                    <footer className="fixed bottom-0 left-64 right-0 z-50">
+                        <div className="flex items-center justify-center w-full bg-stone-300 px-4">
+
                             <div className="flex flex-none">
-                                <button className="size-10 bg-red-500">
+                                <button className="size-10">
                                     <MdSkipPrevious className="size-10"/>
                                 </button>
-                                <button className="size-10 bg-red-500">
-                                    <MdOutlinePlayCircleFilled className="size-10" onClick={() => footerSwitchFunction()}/>
+
+                                <button
+                                    className="size-10"
+                                    onClick={footerSwitchFunction}
+                                    disabled={!lastPlayedTrack}
+                                >
+                                    <MdOutlinePlayCircleFilled className="size-10"/>
                                 </button>
-                                <button className="size-10 bg-red-500">
+
+                                <button className="size-10">
                                     <MdSkipNext className="size-10"/>
                                 </button>
-                                <button onClick={repeat} className="size-10 bg-red-500">
+
+                                <button onClick={repeat} className="size-10">
                                     <MdOutlineRepeat style={{color: isRepeat ? "lightblue" : ""}}/>
                                 </button>
                             </div>
                             
-                            <div className="flex flex-1 justify-stretch">
-                                {cookies.get("pictures") === undefined ? (
-                                    <i className="material-symbols-rounded iconStyles" style={{fontSize:"25px"}}>headphones</i>
+                            <div className="flex items-center flex-1 max-w-2xl mx-8 min-w-0">
+                                {songPicture === null ? (
+                                    <MdHeadphones className="size-12 flex-none"/>
                                 ) : (
-                                    <img className="size-15" src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_1000,h_1000,c_fill,q_100/${cookies.get("pictures")}`}></img>
+                                    <img
+                                        className="size-15 flex-none object-cover"
+                                        src={`https://res.cloudinary.com/${cloud_name}/image/upload/w_1000,h_1000,c_fill,q_100/${cookies.get("pictures")}`}
+                                        alt="Song cover"
+                                    />
                                 )}
 
-                                <div>
-                                    <p className="text-sm bg-red-500 font-semibold">{songTitle}</p>
-                                    <p className="text-xs bg-red-500">{songArtist}</p>
+                                <div className="flex-1 min-w-0 ml-3">
+                                    <p className="text-sm font-semibold truncate">{songTitle}</p>
+                                    <p className="text-xs truncate">{songArtist}</p>
 
-                                    <div className="flex flex-auto">
-                                        <p>{beginningTime}</p>
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-xs">{calculateTime(songSlider)}</p>
+
                                         <Slider
+                                            className="flex-1"
                                             value={[songSlider]}
-                                            min={[0]}
-                                            max={[songSliderMax]}
-                                            defaultValue={[0]}
-                                            onValueCommit={handleSongSliderChange}
+                                            min={0}
+                                            max={songSliderMax}
+                                            step={0.1}
+                                            onValueChange={handleSongSliderChange}
+                                            disabled={!lastPlayedTrack || songSliderMax <= 0}
                                         />
-                                        <p>{endTime}</p>
+
+                                        <p className="text-xs">{calculateTime(songSliderMax)}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="flex flex-none bg-red-500">
-                                <button onClick={() => mute()}>
-                                    {calculateVolume(volume)}
+                            <div className="flex flex-none items-center gap-2">
+                                <button onClick={mute} aria-label={volume === 0 ? "Unmute" : "Mute"}>
+                                    {calculateVolume(volume / 100)}
                                 </button>
+
                                 <Slider
-                                    defaultValue={[30]}
+                                    className="w-24"
                                     value={[volume]}
-                                    onValueChange={(e) => setVolume(e)}
+                                    onValueChange={handleVolumeChange}
+                                    min={0}
                                     max={100}
                                     step={1}
                                 />
-                                <input id="volumeSlider" type="range" min="0" max="100" defaultValue="80" />
                             </div>
                         </div>
                     </footer>
                 </div>
-            </div>
             </SidebarProvider>
         </ThemeProvider>
     )

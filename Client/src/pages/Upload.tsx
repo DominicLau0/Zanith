@@ -1,5 +1,6 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Input } from "@/components/ui/input"
+import { Dropzone, DropzoneContent, DropzoneEmptyState } from '@/components/ui/shadcn-io/dropzone';
 
 import {
   Select,
@@ -176,72 +177,98 @@ const displayImage = (event) => {
 }
 
 export default function Upload(){
+    const [files, setFiles] = useState<File[] | undefined>();
+
     useEffect(() => {
         document.title = "Upload";
     }, []);
 
+    const handleDrop = (files: File[]) => {
+        console.log(files);
+        setFiles(files);
+    };
+
     return (
-        <div className="uploadContainer">
-            <div className="songInfo">
-                <h2 id="authenticationTitle">Upload Songs</h2>
-                <label className="authenticationLabel" htmlFor="title">Song Title</label>
-                <br/>
-                <Input className="textbox" type="text" id="title" name="title" onKeyUp={submitSongs} placeholder="Song Title"/>
-                <div id="titleMessageUpload"></div>
-                <label className="authenticationLabel" htmlFor="genre">Genre</label>
-                <br/>
-                <input className="textbox" list="genreList" id="genre" onKeyUp={submitSongs} placeholder="Select the genre"/>
-                <datalist id="genreList">
-                    <option value="Classical"></option>
-                    <option value="Rock"></option>
-                    <option value="Electronic"></option>
-                    <option value="Hip hop"> </option>
-                    <option value="Rap"></option>
-                </datalist>
-                <Select>
-                    <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Select the genre" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectGroup>
-                        <SelectLabel>Genre</SelectLabel>
-                        <SelectItem value="classical">Classical</SelectItem>
-                        <SelectItem value="rock">Rock</SelectItem>
-                        <SelectItem value="electronic">Electronic</SelectItem>
-                        <SelectItem value="hiphop">Hip hop</SelectItem>
-                        <SelectItem value="rap">Rap</SelectItem>
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-                <div id="genreMessageUpload"></div>
-                <label className="authenticationLabel" htmlFor="description">Description</label>
-                <br/>
-                <textarea className="textbox" id="description" name="description" onKeyUp={submitSongs} placeholder="Enter some descriptions"></textarea>
-                <div id="descriptionMessageUpload"></div>
-                <button className="submitSongs authenticationMargin" type="button" onClick={() => submitSongs(true)} id="uploadSong">Upload</button>
-            </div>
-            <div className="displayCover">
-                <div className="displayImageSong">
-                    <div className="displayImage">
-                        <label className="authenticationLabel" htmlFor="imageFile">Upload Your Image</label>
-                        <br/>
-                        <input className="songUpload" type="file" id="imageFile" name="imageFile" onChange={displayImage} accept="image/*"/>
-                        <div id="imageUploadMessageUpload"></div>
+        <div className="mr-8">
+            {files===undefined ? (
+                <>
+                    <p>Upload your audio file</p>
+                    <Dropzone
+                        maxSize={1024 * 1024 * 10}
+                        minSize={1024}
+                        onDrop={handleDrop}
+                        onError={console.error}
+                        src={files}
+                        >
+                        <DropzoneEmptyState />
+                        <DropzoneContent />
+                    </Dropzone>
+                </>
+            ) : (
+                <>
+                    <div className="flex bg-red-500">
+                        <div className="displayCover">
+                            <div className="displayImageSong">
+                                <div className="displayImage">
+                                    <label className="authenticationLabel" htmlFor="imageFile">Upload Your Image</label>
+                                    <br/>
+                                    <input className="songUpload" type="file" id="imageFile" name="imageFile" onChange={displayImage} accept="image/*"/>
+                                    <div id="imageUploadMessageUpload"></div>
+                                </div>
+                                <div className="displaySongs">
+                                    <label className="authenticationLabel" htmlFor="songFile">Upload Your Song</label>
+                                    <br/>
+                                    <input className="songUpload" type="file" id="songFile" name="songfile" onChange={displaySong} accept="audio/*"/>
+                                    <div id="songUploadMessageUpload"></div>
+                                </div>
+                            </div>
+                            <div className="progressSection"> 
+                                <p>Progress:</p>
+                                <div className="progressTemplate">
+                                    <div id="progressBar"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label className="authenticationLabel" htmlFor="title">Song Title</label>
+                            <br/>
+                            <Input className="textbox" type="text" id="title" name="title" onKeyUp={submitSongs} placeholder="Song Title"/>
+                            <div id="titleMessageUpload"></div>
+                            <label className="authenticationLabel" htmlFor="genre">Genre</label>
+                            <br/>
+                            <input className="textbox" list="genreList" id="genre" onKeyUp={submitSongs} placeholder="Select the genre"/>
+                            <datalist id="genreList">
+                                <option value="Classical"></option>
+                                <option value="Rock"></option>
+                                <option value="Electronic"></option>
+                                <option value="Hip hop"> </option>
+                                <option value="Rap"></option>
+                            </datalist>
+                            <Select>
+                                <SelectTrigger className="w-[180px]">
+                                    <SelectValue placeholder="Select the genre" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                    <SelectLabel>Genre</SelectLabel>
+                                    <SelectItem value="classical">Classical</SelectItem>
+                                    <SelectItem value="rock">Rock</SelectItem>
+                                    <SelectItem value="electronic">Electronic</SelectItem>
+                                    <SelectItem value="hiphop">Hip hop</SelectItem>
+                                    <SelectItem value="rap">Rap</SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                            <div id="genreMessageUpload"></div>
+                            <label className="authenticationLabel" htmlFor="description">Description</label>
+                            <br/>
+                            <textarea className="textbox" id="description" name="description" onKeyUp={submitSongs} placeholder="Enter some descriptions"></textarea>
+                            <div id="descriptionMessageUpload"></div>
+                            <button className="submitSongs authenticationMargin" type="button" onClick={() => submitSongs(true)} id="uploadSong">Upload</button>
+                        </div>
                     </div>
-                    <div className="displaySongs">
-                        <label className="authenticationLabel" htmlFor="songFile">Upload Your Song</label>
-                        <br/>
-                        <input className="songUpload" type="file" id="songFile" name="songfile" onChange={displaySong} accept="audio/*"/>
-                        <div id="songUploadMessageUpload"></div>
-                    </div>
-                </div>
-                <div className="progressSection"> 
-                    <p>Progress:</p>
-                    <div className="progressTemplate">
-                        <div id="progressBar"></div>
-                    </div>
-                </div>
-            </div>
+                </>
+            )}
         </div>
     )
 }

@@ -33,7 +33,9 @@ export default function SignUp(props){
     const [invalidEmail, setInvalidEmail] = useState("");
     const [invalidDisplayName, setInvalidDisplayName] = useState("");
 
-    function signupFunction(){
+    async function signupFunction(e){
+        e.preventDefault()
+
         //Clear the system message.
         setInvalidUsername("");
         setInvalidPassword("");
@@ -52,30 +54,33 @@ export default function SignUp(props){
         if(email === ""){
             setInvalidEmail("Enter an email.");
         }
+        
         if(displayName === ""){
             setInvalidDisplayName("Enter a name.");
         }
     
         //Sends the user data to the server.
         if(username !== "" && password.length >=10 && email !== "" && displayName !== ""){
-            let personalInfo = {"username": username, "password": password, "email": email, "displayName": displayName};
-    
-            let xhttp = new XMLHttpRequest();
-    
-            xhttp.onreadystatechange = function(){
-                if(this.readyState === 4 && this.status === 400){
+            try{
+                const res = await fetch("http://localhost:5000/signup", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({"username": username, "password": password, "email": email, "displayName": displayName})
+                });
+
+                if(res.status === 400){
                     setInvalidUsername("Username has been taken.");
 
-                }else if(this.readyState === 4 && this.status === 201){
+                }else if(res.status === 201){
                     setIsOpen(false);
                     props.setUsername(username)
                 }
+            } catch (err) {
+                setInvalidPassword("Network error. Please try again.")
             }
-    
-            xhttp.open("POST", "http://localhost:5000/signup", false);
-            xhttp.withCredentials = true;
-            xhttp.setRequestHeader("Content-Type", "application/json");
-            xhttp.send(JSON.stringify(personalInfo));
         }
     }
 
@@ -85,36 +90,38 @@ export default function SignUp(props){
                 <Button variant="ghost">Sign up</Button>
             </DialogTrigger>
             <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Sign up</DialogTitle>
-                    <DialogDescription>
-                        Create a new account now.
-                    </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4">
-                    <div className="grid gap-3">
-                        <Label htmlFor="name-1">Name</Label>
-                        <Input id="name-1" name="name" />
-                    </div>
-                    <div className="grid gap-3">
-                        <div className="flex items-center">
-                            <Label htmlFor="password">Password</Label>
-                            <a
-                                href="#"
-                                className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                            >
-                                Forgot your password?
-                            </a>
+                <form onSubmit={signupFunction}>
+                    <DialogHeader>
+                        <DialogTitle>Sign up</DialogTitle>
+                        <DialogDescription>
+                            Create a new account now.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4">
+                        <div className="grid gap-3 mt-4">
+                            <Label htmlFor="name">Name</Label>
+                            <Input id="name" type="name" onChange={e => setDisplayName(e.target.value)} required />
                         </div>
-                        <Input id="password" type="password" required />
+                        <div className="grid gap-3">
+                            <Label htmlFor="username">Username</Label>
+                            <Input id="username" name="username" onChange={e => setUsername(e.target.value)} required/>
+                        </div>
+                        <div className="grid gap-3">
+                            <Label htmlFor="email">Email</Label>
+                            <Input id="email" type="email" onChange={e => setEmail(e.target.value)} required />
+                        </div>
+                        <div className="grid gap-3">
+                            <Label htmlFor="password">Password</Label>
+                            <Input id="password" type="password" onChange={e => setPassword(e.target.value)} required />
+                        </div>
                     </div>
-                </div>
-                <DialogFooter>
-                    <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <Button type="submit">Signup</Button>
-                </DialogFooter>
+                    <DialogFooter className="mt-4">
+                        <DialogClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <Button type="submit">Sign up</Button>
+                    </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     )

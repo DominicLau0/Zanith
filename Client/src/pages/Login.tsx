@@ -46,31 +46,33 @@ export default function Login(){
         }
 
         //Sends the user data to the server.
-        if(username !== "" && password !== ""){   
-            let xhttp = new XMLHttpRequest();
-    
-            xhttp.onreadystatechange = function(){
-                if(this.readyState === 4 && this.status === 400){
+        if(username !== "" && password !== ""){
+            try{
+                const res = await fetch("http://localhost:5000/login", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({"username": username, "password": password})
+                });
+            
+                if(res.status === 400){
                     setInvalidUsername("Username does not exist.");
 
-                }else if(this.readyState === 4 && this.status === 404){
+                }else if(res.status === 404){
                     setInvalidPassword("Incorrect Password.");
 
-                }else if(this.readyState === 4 && this.status === 201){
+                }else if(res.status === 201){
                     setIsOpen(false);
                     setUsername(username)
+                }else {
+                    const text = await res.text();
+                    console.warn("Unexpected response:", res.status, text);
                 }
+            } catch (err) {
+                setInvalidPassword("Network error. Please try again.")
             }
-
-            xhttp.open("POST", "http://localhost:5000/login", false);
-            xhttp.withCredentials = true;
-            xhttp.setRequestHeader("Content-Type", "application/json");
-            xhttp.send(JSON.stringify({"username": username, "password": password}));
-
-            const response = await fetch("http://localhost:5000/login", {
-                method: "POST",
-                body: JSON.stringify({"username": username, "password": password})
-            })
         }
     }
 
@@ -88,9 +90,9 @@ export default function Login(){
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4">
-                        <div className="grid gap-3">
+                        <div className="grid gap-3 mt-4">
                             <Label htmlFor="name-1">Username</Label>
-                            <Input id="name-1" name="username" onChange={e => setUsername(e.target.value)}/>
+                            <Input id="name-1" name="username" onChange={e => setUsername(e.target.value)} required/>
                         </div>
                         <div className="grid gap-3">
                             <div className="flex items-center">
@@ -105,7 +107,7 @@ export default function Login(){
                             <Input id="password" type="password" onChange={e => setPassword(e.target.value)} required />
                         </div>
                     </div>
-                    <DialogFooter>
+                    <DialogFooter className="mt-4">
                         <DialogClose asChild>
                         <Button variant="outline">Cancel</Button>
                         </DialogClose>

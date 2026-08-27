@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useParams, useLoaderData, useOutletContext, useNavigate } from 'react-router-dom';
 import DisplaySong from "../Reusable_Functions/display_song.js"
 import axios from 'axios';
-import { MdAccountCircle } from "react-icons/md";
+import { MdAccountCircle, MdError } from "react-icons/md";
 import { Separator } from "@/components/ui/separator"
 
 function RenderSearch({ songs }){
@@ -25,9 +25,9 @@ function RenderSearch({ songs }){
     }
     if(songs.artist.length === 0 && songs.songs.length === 0){
         return(
-            <div className='noResults'>
-                <i style={{fontSize: "50px"}} className="material-symbols-outlined iconStyles">error</i>
-                <p style={{fontSize: "30px"}}>No Results Found</p>
+            <div className='flex items-center'>
+                <MdError />
+                <p className="tracking-tight">No Results Found</p>
             </div>
         )
     }
